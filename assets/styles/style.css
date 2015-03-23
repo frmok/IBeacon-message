@@ -711,8 +711,14 @@ nav.sidebar ul > li > a:hover{
     color: #E87878;
 }
 
+.color-green, .color-green > a{
+    color: #5B9B36;
+    cursor: pointer;
+}
+
 .color-gray, .color-gray > a{
     color: #666;
+    cursor: pointer;
 }
 
 .text-center{
@@ -741,6 +747,58 @@ nav.sidebar ul > li > a:hover{
 
 .tile_content{
     font-size: 3rem;
+}
+
+/***
+Modal
+***/
+.custom_modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 400px;
+    margin: 120px auto;
+    z-index: 65536;
+    font-family: 'Proxima';
+}
+.custom_modal_header{
+    border-radius: 5px 5px 0 0;
+    background: #398ABB;
+    color: #EFEFEF;
+    padding: 1rem 1.5rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    font-family: 'Proxima';
+}
+
+.custom_modal_content{
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
+    background: #fff;
+}
+
+.custom_modal_footer{
+    background: #fff;
+    overflow: hidden;
+    padding: 0 0 1.5rem 2.5rem;
+    border-radius: 0 0 5px 5px;
+}
+
+.custom_modal_content input{
+    width: 100%;
+    padding: 0.5rem;
+}
+
+.custom_modal_footer input{
+    border: 0;
+    padding: 0.5rem 1rem;
+    background: green;
+    color: #fff;
+}
+
+.custom_modal_footer input.warn{
+    background: red;
 }
 
 /***
