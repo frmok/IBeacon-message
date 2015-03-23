@@ -45,7 +45,8 @@ module.exports.connections = {
     host: 'direct.andymok.me',
     user: 'ik1401',
     password: 'ik1401',
-    database: 'ik1401'
+    database: 'ik1401',
+    timezone: 'utc'
   },
 
   /***************************************************************************

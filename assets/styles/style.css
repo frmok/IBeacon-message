@@ -1,0 +1,717 @@
+@import url(http://fonts.googleapis.com/css?family=Lobster+Two:400,700italic);
+@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
+@font-face {
+    font-family: Proxima;
+    src        : local('Proxima Nova'), url("/proxima.woff") format("woff");
+}
+@font-face {
+    font-family: Proxima Black;
+    src        : local('Proxima Nova Black'), url("/proxmablack.otf") format("opentype");
+}
+input{
+    outline: none;
+}
+html, body {
+    height     : 100%;
+    font-family: 'Montserrat', sans-serif;
+    font-size  : 12px !important;
+    background: #E5E5E5;
+}
+
+select {
+    -webkit-appearance: none;
+    appearance        : none;
+    border            : 0;
+    border-radius     : 0;
+}
+
+a, a:hover, a:focus {
+    text-decoration: none;
+}
+
+.main > .row {
+    margin     : 0;
+    padding-top:64px;
+}
+
+.loading_bar{
+    width: 0%;
+    background: rgb(13, 204, 249);
+    height: 3px;
+    position: fixed;
+    top:0;
+    left:280px;
+}
+
+.loading{
+    width: 0%;
+    opacity: 1;
+    -webkit-animation: loading 2s forwards; /* Chrome, Safari, Opera */
+    animation: loading 2s forwards;
+}
+
+.finish{
+    width: 100%;
+    opacity: 0;
+    transition: all linear 1s,;
+    -webkit-transition: all linear 1s;
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes loading {
+    0% {width: 0%;}
+    25% {width: 30%;}
+    100% {width: 80%;}
+}
+
+/* Standard syntax */
+@keyframes loading {
+    0% {width: 0%;}
+    25% {width: 30%;}
+    100% {width: 80%;}
+}
+
+.btn {
+    padding   : .6rem 1rem;
+    border: 0;
+    border-radius: 0;
+    font-size : 1em;
+    background: rgba(67, 96, 65, 0.69);
+    color     : #f7f7f7;
+    transition: all .3s linear;
+}
+
+.btn:hover {
+    background: #034b03;
+    color     : #fff;
+}
+
+.btn-warning {
+    background: rgba(234, 16, 16, 0.69);
+}
+
+.btn-warning:hover{
+    background: rgba(153, 4, 4, 0.69);
+}
+
+.bg-success {
+    background-color: #75C754;
+    color           : #095E18;
+}
+
+.login {
+    width          : 100%;
+    height         : 100%;
+    background     : #303641;
+    background-size: cover;
+}
+
+.login h1{
+    font-family: 'Lobster Two', cursive;
+    font-size  : 4em;
+    font-style : italic;
+    text-align : center;
+    color      : #fff;
+    text-shadow: 4px 3px 0px #3A4352, 9px 8px 0px rgba(17, 18, 19, 0.15);
+}
+
+.login .warning{
+    margin     : 0 10px;
+    font-size  : 1.3em;
+    font-weight: 700;
+    color      : #fff;
+    background : rgba(252, 70, 70, 0.56);
+    padding    : 15px;
+}
+.login .success{
+    margin     : 0 10px;
+    font-size  : 1.3em;
+    font-weight: 700;
+    color      : #fff;
+    background : rgba(33, 215, 125, 0.72);
+    padding    : 15px;
+}
+.login label {
+    position : absolute;
+    float    : left;
+    color    : #fff;
+    font-size: 1.6em;
+    top      : 20px;
+}
+
+.login input[type='text'],
+.login input[type='password'] {
+    position     : relative;
+    width        : 100%;
+    background   : transparent;
+    border       : 0;
+    border-radius:0;
+    padding      : 9px 50px;
+    border-bottom: 1px solid #fff;
+    color        : #fff;
+    font-size    : 1.3em;
+}
+
+.login input[type='submit'], .login .btn{
+    width        : 100%;
+    border-radius: 0;
+    font-size    : 1.3em;
+    padding      : 15px;
+}
+
+.login .btn{
+    background: rgba(84, 149, 236, 0.7);
+}
+.login .btn:hover{
+    background: rgba(40, 85, 145, 0.7);
+}
+
+.login input[type='text']::-webkit-input-placeholder,
+.login input[type='password']::-webkit-input-placeholder{
+    color: #fff;
+}
+
+.login input[type='text']::-moz-placeholder,
+.login input[type='password  ']::-moz-placeholder{
+    color: #fff;
+}
+
+/* firefox 19+ */
+.login input[type='text']:-ms-input-placeholder,
+.login input[type='password']:-ms-input-placeholder{
+    color: #fff;
+}
+
+/* ie */
+.login input[type='text'] input:-moz-placeholder,
+.login input[type='passwor'] input:-moz-placeholder{
+    color: #fff;
+}
+
+.login form, 
+.login .finish {
+    position: absolute;
+    top     : 0;
+    bottom  : 0;
+    left    : 0;
+    right   : 0;
+    margin  : auto;
+    width   : 400px;
+    height  : 300px;
+}
+
+.login .form-group {
+    position     : relative;
+    border       : 0;
+    margin-bottom: -20px;
+}
+
+.form-group {
+    margin-bottom: 0;
+    border-bottom: 1px solid #ccc;
+    overflow     : hidden;
+    padding      : 15px 10px;
+}
+
+.form-group select {
+    padding      : 5px 15px;
+    border-radius: 5px;
+    border       : 1px solid #aaa;
+}
+
+.form-group textarea{
+    line-height: 1.5rem;
+    padding: 1rem 1rem;
+    border: 1px solid #ccc;
+    margin: 1rem 0;
+}
+
+.bg-success {
+    padding    : 10px 20px;
+    font-weight: 700;
+    font-size  : 1.3em;
+}
+
+nav.sidebar{
+    position: fixed;
+    height: 100%;
+    width: 280px;
+    z-index: 2;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #303641;
+}
+
+nav.sidebar > img{
+    padding: 2rem 0;
+    max-width: 70%;
+    margin: auto;
+    display: block;
+}
+nav.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 280px;
+}
+
+nav.sidebar ul > li{
+    font-size: 1.2em;
+    font-weight: 400;
+    padding: 0.7rem 1.6rem;
+    color: #fff;
+    transition: all ease-in .2s;
+}
+
+nav.sidebar ul > li:last-child{
+    margin-bottom: 20px;
+}
+
+nav.sidebar ul > li.cat{
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 1.5rem 1.6rem 0.5rem 1.6rem;
+    color: #A4B2CB;
+}
+
+nav.sidebar ul > li.cat:hover{
+    background: inherit;
+}
+
+nav.sidebar ul > li:hover{
+    background: #1D2128;
+}
+nav.sidebar ul > li > a{
+    display: block;
+    width: 100%;
+    color: #fff;
+}
+
+nav.sidebar ul > li > a:hover{
+    display: block;
+    width: 100%;
+    color: rgb(92, 208, 92);
+}
+
+.main{
+    width: 100%;
+    height: 100%;
+    background: #E5E5E5;
+    position: relative;
+    padding-left: 280px;
+    overflow: auto;
+    padding-bottom: 1.5rem;
+}
+
+.breadcrumb{
+    width: 100%;
+    height: 60px;
+    background: #fbfbfb;
+    line-height: 60px;
+    padding: 0rem 1.5rem;
+    font-size: 1.5em;
+    color: #666;
+    border-bottom: 1px solid #ccc;
+    margin: 0;
+}
+.breadcrumb > span{
+    margin-right: .5rem;
+}
+.breadcrumb > span > .fa{
+    margin-right: .3rem;
+}
+
+.main-view{
+    margin-top: 1.5rem;
+}
+
+.form-layout{
+    border: 1px solid #ccc;
+    border-bottom: 2px solid #ccc;
+    background: #fbfbfb;
+    color: #888;
+    overflow: hidden;
+}
+
+.form-title{
+    font-size: 1.2rem;
+    font-weight: 700;
+    background: #ebebeb;
+    border-bottom: 1px solid #ccc;
+    padding: 1rem 1.5rem;
+    color: #666;
+}
+
+.form-layout label{
+    text-align: right;
+}
+
+.first-group{
+    margin-top: 2rem;
+}
+
+.form-layout .form-group{
+    padding: 0;
+    line-height: 4.5em;
+    position: relative;
+    border: 0;
+}
+
+.form-layout input[type=text]{
+    position: absolute;
+    height: 3.5em;
+    top: 0;
+    bottom: 0;
+    margin:auto 0;
+    line-height: 1em;
+    border: 1px solid #ccc;
+}
+
+.form-layout input[type=file]{
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    opacity: 0;
+    height: 3.5rem;
+}
+
+.form-layout .upload-btn{
+    position: absolute;
+    height: 3.5em;
+    left: 25%;
+    cursor: pointer;
+    background: #666;
+    color: #fff;
+    top: 0;
+    bottom: 0;
+    margin:auto 0;
+    line-height: 1em;
+    padding: 0;
+    overflow: hidden;
+}
+.form-thumbnail{
+    width: 100%;
+    padding: 0;
+    background-position: center center !important;
+    background-size: cover !important;
+    height: 300px;
+}
+
+.upload-btn > span{
+    display: block;
+    width: 100%;
+    line-height: 3.5rem;
+    text-align: center;
+}
+
+.form-layout select{
+    height: 3.5rem;
+    position: absolute;
+    top: 0;
+    line-height: 1rem;
+    bottom: 0;
+    border-radius: 0;
+    border: 1px solid #ccc;
+    background: #fff;
+    margin: auto 0;
+}
+
+.bill-layout .bill-header > div{
+    padding: 1.6rem;
+}
+
+.bill-header{
+    padding: 2rem;
+    border-bottom: 1px solid #ccc;
+    overflow: hidden;
+}
+
+.bill-header-value{
+    color: #777;
+    font-weight: 700;
+    font-size: 2.2rem;
+}
+
+.bill-header-label{
+    font-size: 1.2rem;
+}
+
+.bill-content{
+    padding: 2rem;
+    border-bottom: 1px solid #ccc;
+    overflow: hidden;
+}
+
+.bill-content table{
+    width: 100%;
+}
+
+.bill-content th{
+    padding: 1.6rem;
+    font-size: 1.2rem;
+    font-weight: 400;
+    text-align: right;
+}
+
+.bill-content-header{
+    padding: .5rem 1.6rem;
+    color: #777;
+    font-size: 2rem;
+}
+
+.bill-content td{
+    padding: .8rem 1.6rem;
+    font-size: 1.6rem;
+    color: #777;
+    text-align: right;
+    font-weight: 700;
+}
+
+
+.bill-footer{
+    padding: 2rem;
+    overflow: hidden;
+}
+
+.bill-footer > div{
+    text-align: right;
+    color: #777;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.form-bottom{
+    width: 50%;
+    margin: auto;
+    padding: 1rem;
+}
+
+.form-bottom .btn{
+    border: 0;
+    border-radius: 0;
+    padding: 1rem;
+}
+
+.form-layout .msg{
+    background: rgb(92, 208, 92);
+    padding: 1rem 1.6rem;
+    color: #fff;
+}
+
+.no-empty .locked{
+    display: none !important;
+}
+
+.table-layout{
+    padding-left: 1.5rem;
+}
+
+.table-cell{
+    float: left;
+    width: 33.3333%;
+    padding-right: 1.5rem;
+    padding-bottom: 30px;
+}
+
+.table-cell .table-header{
+    background: #ebebeb;
+    font-size: 1.2rem;
+    padding: 1rem;
+    color: #666;
+    font-weight: 700;
+    border: 1px solid #ccc;
+}
+
+.table-content{
+    position: relative;
+    background: #fff;
+    text-align: center;
+    font-size: 3rem;
+    color:#333;
+    height: 150px;
+    overflow: hidden;
+}
+
+.table-content .btn{
+    font-size: 1.2rem;
+}
+
+.empty .table-content{
+    background: rgb(44, 153, 116);
+    color: #efefef;
+}
+
+.locked .table-content{
+    background: rgb(182, 72, 72);
+    color: #efefef;
+}
+
+.table-content-text{
+    padding-top: 20px;
+    position: relative;
+    z-index: 4;
+}
+
+.table-icon{
+    position: absolute;
+    font-size: 16rem;
+    right: -9px;
+    line-height: 3rem;
+    bottom: -65px;
+    z-index: 3;
+    color: rgba(205, 205, 205, 0.51);
+}
+
+.page-controller{
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #666;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.table-control{
+    width: 50%;
+    background: #ebebeb;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    margin-bottom: 1.5rem;
+}
+
+.table-control select{
+    padding: 0.5rem 2rem;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+.list_layout{
+    border: 1px solid #ccc;
+    border-bottom: 2px solid #ccc;
+}
+
+.list_layout table{
+    width: 100%;
+}
+
+.list_layout table tfoot{
+    background: #ebebeb;
+    border-top: 1px solid #ccc;
+}
+
+.list_layout .pagination{
+    margin: 10px 0;
+}
+
+.pagination>li:first-child>a, 
+.pagination>li:first-child>span,
+.pagination>li:last-child>a, 
+.pagination>li:last-child>span{
+    border-radius: 0;
+}
+
+.pagination>li>a, .pagination>li>span{
+    cursor: pointer;
+    margin-right: .5rem;
+}
+
+.list_layout table thead{
+    width: 100%;
+    background: #ebebeb;
+    border-bottom: 1px solid #ccc;
+}
+
+.list_layout th{
+    font-size: 1.2rem;
+    padding: 1rem;
+    color: #666;
+    font-weight: 700;
+}
+
+.list_layout tbody td{
+    padding: 1rem 1.5rem;
+    background: #fff;
+    color: #666;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.order_list_layout tr.new td{
+    background: rgb(100, 181, 100);
+    color: #fff;
+}
+
+.order_list_layout tr.urgent td{
+    background: rgb(176, 92, 92);
+    color: #fff;
+}
+
+.chart{
+    padding-left: 0;
+}
+.chart > div{
+    border: 1px solid #ccc;
+    padding: 0;
+}
+
+.chart-header{
+    background: #ebebeb;
+    font-size: 1.2rem;
+    padding: 1rem;
+    color: #666;
+    font-weight: 700;
+    border-bottom: 1px solid #ccc;
+}
+
+.chart-content{
+    background: #efefef;
+}
+
+.chart-content > canvas{
+    padding: 1.5rem;
+    width: 100%;
+    height: 400px;
+}
+
+.tile{
+    margin-top: 1.5rem;
+    padding: 10px;
+}
+
+.tile_red{
+    background: rgb(244, 100, 100);
+    color: #efefef;
+}
+
+.tile_blue {
+  background: rgb(100, 162, 244);
+  color: #efefef;
+}
+
+.tile_orange {
+  background: rgb(244, 166, 100);
+  color: #efefef;
+}
+
+.tile_content{
+    font-size: 3rem;
+}
+
+/***
+AngularJS nvd3 chart styles
+***/
+
+.nvd3 text{
+    font: normal 10px Proxima;
+}
+
+.nvtooltip{
+    font: normal 12px Proxima;
+}
+
+.nvtooltip h3{
+    font-weight: 700;
+    font-size: 1rem;
+}

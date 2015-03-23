@@ -1,0 +1,26 @@
+<div class="col-md-12 main-view">
+    <div class="form-layout">
+        <div class="form-title">
+            {{crud_action}}
+        </div>
+        <div ng-show="msg" class="msg">
+            <i class="fa fa-check"></i> {{msg}}
+        </div>
+        <form ng-submit="updateLocation()">
+            <div class="form-group first-group">
+                <label for="location_name" class="col-xs-3">Location Name</label>
+                <input required ng-model="location.name" class="col-xs-4" name="name" type="text" id="location_name">
+            </div>
+            <div class="form-group first-group">
+                <label for="disabled" class="col-xs-3">Availability</label>
+                <select id="disabled" ng-model="location.disabled">
+                    <option value="0">Enabled</option>
+                    <option value="1">Disabled</option>
+                </select>
+            </div>
+            <div class="form-bottom">
+                <input class="btn" type="submit">
+            </div>
+        </form>
+    </div>
+</div>

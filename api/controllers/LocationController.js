@@ -41,7 +41,7 @@ module.exports = {
             if(err){
                 res.send(500, { error: "FATAL ERROR" });
             }else{
-                res.send(location);
+                res.send(location[0]);
             }
         });
     },
@@ -64,7 +64,7 @@ module.exports = {
                 console.log(err);
                 res.send(500, { error: "FATAL ERROR" });
             }else{
-                res.send(location);
+                res.send(location[0]);
             }
         });
     },
@@ -89,7 +89,7 @@ module.exports = {
                 console.log(err);
                 res.send(500, { error: "FATAL ERROR" });
             }else{
-                res.send(location);
+                res.send(location[0]);
             }
         });
     },
