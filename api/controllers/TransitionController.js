@@ -27,6 +27,26 @@ module.exports = {
     },
 
     /**
+    * This method returns the list of (non-left) transitions of a particular location
+    *
+    * @method index
+    * @param id {Integer} The id of location
+    * @return {Array} Returns an array of transitions on success
+    */
+    atLocation: function (req, res){
+        var location_id = req.param("id");
+        Transition
+        .find({ location_id: location_id, next_location: 0 })
+        .exec(function(err, transitions) {
+            if(err){
+                res.send(500, { error: "FATAL ERROR" });
+            }else{
+                res.send(transitions);
+            }
+        });
+    },
+
+    /**
     * This method creates a new transition and returns it
     *
     * @method create
@@ -72,6 +92,12 @@ module.exports = {
         });
     },
 
-
+    subscribeToTransition:function (req, res){
+        var roomName = 'transition';
+        sails.sockets.join(req.socket, roomName);
+        res.json({
+            message: 'Subscribed to a room called '+roomName
+        });
+    },
 };
 

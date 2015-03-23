@@ -28,9 +28,9 @@ module.exports = {
     /**
     * This method returns the data of a location
     *
-    * @method index
+    * @method detail
     * @param id {Integer} The id of location
-    * @return {Array} Returns data of a location on success
+    * @return {Object} Returns data of a location on success
     */
     detail: function (req, res){
         var id = req.param("id");
@@ -41,7 +41,36 @@ module.exports = {
             if(err){
                 res.send(500, { error: "FATAL ERROR" });
             }else{
-                res.send(location[0]);
+                //calculate the number of people
+                Transition
+                .count({ location_id: location[0].id, next_location: 0 })
+                .exec(function (err, count){
+                    location[0].people = count;
+                    res.send(location[0]);
+                });
+            }
+        });
+    },
+
+    /**
+    * This method returns the data of a location
+    *
+    * @method getByBeacon
+    * @param major {Integer} The major of beacon
+    * @param minor {Integer} The minor of beacon
+    * @return {Object} Returns data of a location on success
+    */
+    getByBeacon: function (req, res){
+        var major = req.param("major");
+        var minor = req.param("minor");
+        Beacon
+        .find({ major: major, minor: minor })
+        .populate('location_id', { where: { disabled: 0 } })
+        .exec(function(err, beacon) {
+            if(err){
+                res.send(500, { error: "FATAL ERROR" });
+            }else{
+                res.send(beacon[0].location_id);
             }
         });
     },
@@ -64,7 +93,7 @@ module.exports = {
                 console.log(err);
                 res.send(500, { error: "FATAL ERROR" });
             }else{
-                res.send(location[0]);
+                res.send(location);
             }
         });
     },

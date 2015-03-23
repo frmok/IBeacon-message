@@ -34,6 +34,7 @@ module.exports.routes = {
 
   '/': {
     'GET /location/detail/:id': 'LocationController.detail',
+    'GET /transition/atLocation/:id': 'TransitionController.atLocation',
   },
 
   /***************************************************************************

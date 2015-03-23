@@ -5,8 +5,9 @@
     src        : local('Proxima Nova'), url("/proxima.woff") format("woff");
 }
 @font-face {
-    font-family: Proxima Black;
-    src        : local('Proxima Nova Black'), url("/proxmablack.otf") format("opentype");
+    font-family: Proxima;
+    font-weight: 700;
+    src        : local('Proxima Nova Bold'), url("/proxima-bold.ttf") format("truetype");
 }
 input{
     outline: none;
@@ -301,6 +302,7 @@ nav.sidebar ul > li > a:hover{
     padding-left: 280px;
     overflow: auto;
     padding-bottom: 1.5rem;
+    font-family: 'Proxima';
 }
 
 .breadcrumb{
@@ -316,6 +318,7 @@ nav.sidebar ul > li > a:hover{
 }
 .breadcrumb > span{
     margin-right: .5rem;
+    font-weight: 700;
 }
 .breadcrumb > span > .fa{
     margin-right: .3rem;
@@ -331,6 +334,7 @@ nav.sidebar ul > li > a:hover{
     background: #fbfbfb;
     color: #888;
     overflow: hidden;
+    margin-bottom: 1.5rem;
 }
 
 .form-title{
@@ -395,6 +399,10 @@ nav.sidebar ul > li > a:hover{
     background-position: center center !important;
     background-size: cover !important;
     height: 300px;
+}
+
+.list_layout input[type="text"]{
+    height: 2.5rem;
 }
 
 .upload-btn > span{
@@ -492,10 +500,14 @@ nav.sidebar ul > li > a:hover{
     padding: 1rem;
 }
 
-.form-layout .msg{
+.form-layout .msg, .list_layout .msg{
     background: rgb(92, 208, 92);
     padding: 1rem 1.6rem;
     color: #fff;
+}
+
+.form-layout .msg-warn, .list_layout .msg-warn{
+    background: #CF4760;
 }
 
 .no-empty .locked{
@@ -593,11 +605,15 @@ nav.sidebar ul > li > a:hover{
     border-bottom: 2px solid #ccc;
 }
 
-.list_layout table{
+.header-border{
+    border-top: 1px solid #ccc;
+}
+
+.list_layout table, .normal-content table{
     width: 100%;
 }
 
-.list_layout table tfoot{
+.list_layout table tfoot, .normal-content table tfoot{
     background: #ebebeb;
     border-top: 1px solid #ccc;
 }
@@ -618,20 +634,21 @@ nav.sidebar ul > li > a:hover{
     margin-right: .5rem;
 }
 
-.list_layout table thead{
+.list_layout table thead, .normal-content table thead{
     width: 100%;
     background: #ebebeb;
     border-bottom: 1px solid #ccc;
 }
 
-.list_layout th{
+.list_layout th, .normal-content th{
     font-size: 1.2rem;
     padding: 1rem;
     color: #666;
     font-weight: 700;
 }
 
-.list_layout tbody td{
+.list_layout tbody td, .normal-content tbody td{
+    position: relative;
     padding: 1rem 1.5rem;
     background: #fff;
     color: #666;
@@ -656,7 +673,7 @@ nav.sidebar ul > li > a:hover{
     padding: 0;
 }
 
-.chart-header{
+.chart-header, .normal-header{
     background: #ebebeb;
     font-size: 1.2rem;
     padding: 1rem;
@@ -665,14 +682,41 @@ nav.sidebar ul > li > a:hover{
     border-bottom: 1px solid #ccc;
 }
 
-.chart-content{
+.chart-content, .normal-content{
     background: #efefef;
+    overflow: hidden;
+}
+
+.normal-content > div{
+    padding: 1.5rem;
 }
 
 .chart-content > canvas{
     padding: 1.5rem;
     width: 100%;
     height: 400px;
+}
+
+.icon-block{
+    width: 100%;
+    font-size: 7rem;
+    text-align: center;
+}
+
+.color-blue{
+    color: #5AA1D3;
+}
+
+.color-red{
+    color: #E87878;
+}
+
+.color-gray, .color-gray > a{
+    color: #666;
+}
+
+.text-center{
+    text-align: center;
 }
 
 .tile{
