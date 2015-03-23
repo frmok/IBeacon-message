@@ -25,4 +25,8 @@ http://localhost:1337/location/detail/5
 /api/models folder
 /api/controllers folder
 /config/routes.js
+<<<<<<< HEAD
 ```
+=======
+```
+>>>>>>> 99b8434ae299f366f39d3f29207e98c8f72bc7b6
