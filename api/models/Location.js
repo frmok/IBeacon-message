@@ -6,22 +6,22 @@
  */
 
 module.exports = {
-    tableName: 'location',
-    attributes: {
-        name: {
-            type: 'string'
-        },
-        disabled: {
-            type: 'integer'
-        },
-        beacons: {
-            collection: 'beacon',
-            via: 'location_id'
-        },
+  tableName: 'location',
+  attributes: {
+    name: {
+      type: 'string'
+    },
+    disabled: {
+      type: 'integer'
+    },
+    beacons: {
+      collection: 'beacon',
+      via: 'location_id'
+    },
 
-        transitions: {
-            collection: 'transition',
-            via: 'location_id'
-        },
-    }
+    transitions: {
+      collection: 'transition',
+      via: 'location_id'
+    },
+  }
 };

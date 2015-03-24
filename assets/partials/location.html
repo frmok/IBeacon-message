@@ -1,22 +1,22 @@
 <div class="col-md-12 main-view">
-    <div class="chart">
-        <div class="normal-content">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>People</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="location in locations">
-                        <td>{{location.name}}</td>
-                        <td>{{location.transitions.length}}</td>
-                        <td><a href="#/location/edit/{{location.id}}"><button ng-click="addBeacon()" class="btn">Modify</button></a> <button ng-click="deleteLocation($index)" class="btn btn-warning">Delete</button></span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+  <div class="chart">
+    <div class="normal-content">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>People</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="location in locations">
+            <td>{{location.name}}</td>
+            <td>{{location.transitions.length}}</td>
+            <td><a href="#/location/edit/{{location.id}}"><button ng-click="addBeacon()" class="btn">Modify</button></a> <button ng-click="deleteLocation($index)" class="btn btn-warning">Delete</button></span></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 </div>

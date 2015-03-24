@@ -6,17 +6,16 @@
  */
 
 module.exports = {
-    tableName: 'beacon',
-    attributes: {
-
-        major: {
-            type: 'integer'
-        },
-        minor: {
-            type: 'integer'
-        },
-        location_id: {
-            model: 'location'
-        }
+  tableName: 'beacon',
+  attributes: {
+    major: {
+      type: 'integer'
+    },
+    minor: {
+      type: 'integer'
+    },
+    location_id: {
+      model: 'location'
     }
+  }
 };

@@ -1,66 +1,66 @@
 <div class="col-md-12 main-view">
-    <div class="form-layout">
-        <div class="form-title">
-            {{crud_action}}
-        </div>
-        <div ng-show="msg" class="msg">
-            <i class="fa fa-check"></i> {{msg}}
-        </div>
-        <form ng-submit="updateLocation()">
-            <div class="form-group first-group">
-                <label for="location_name" class="col-xs-3">Location Name</label>
-                <input required ng-model="location.name" class="col-xs-4" name="name" type="text" id="location_name">
-            </div>
-            <div class="form-group">
-                <label for="disabled" class="col-xs-3">Availability</label>
-                <select id="disabled" ng-model="location.disabled">
-                    <option value="0">Enabled</option>
-                    <option value="1">Disabled</option>
-                </select>
-            </div>
-            <div class="form-bottom">
-                <input class="btn" type="submit">
-            </div>
-        </form>
+  <div class="form-layout">
+    <div class="form-title">
+      {{crud_action}}
+    </div>
+    <div ng-show="msg" class="msg">
+      <i class="fa fa-check"></i> {{msg}}
+    </div>
+    <form ng-submit="updateLocation()">
+      <div class="form-group first-group">
+        <label for="location_name" class="col-xs-3">Location Name</label>
+        <input required ng-model="location.name" class="col-xs-4" name="name" type="text" id="location_name">
+      </div>
+      <div class="form-group">
+        <label for="disabled" class="col-xs-3">Availability</label>
+        <select id="disabled" ng-model="location.disabled">
+          <option value="0">Enabled</option>
+          <option value="1">Disabled</option>
+        </select>
+      </div>
+      <div class="form-bottom">
+        <input class="btn" type="submit">
+      </div>
+    </form>
+  </div>
+
+  <div ng-show="location.id > 0" class="list_layout">
+    <div class="form-title">
+      Beacons
+    </div>
+    <div ng-show="msg_beacon" class="msg">
+      <i class="fa fa-check"></i> {{msg_beacon}}
     </div>
 
-    <div ng-show="location.id > 0" class="list_layout">
-        <div class="form-title">
-            Beacons
-        </div>
-        <div ng-show="msg_beacon" class="msg">
-            <i class="fa fa-check"></i> {{msg_beacon}}
-        </div>
-
-        <div ng-show="msg_beacon_error" class="msg msg-warn">
-            <i class="fa fa-times"></i> {{msg_beacon_error}}
-        </div>
-        <div class="normal-content">
-            <table>
-                <tbody>
-                    <tr>
-                        <td>Major</td>
-                        <td>Minor</td>
-                        <td>Action</td>
-                    </tr>
-                    <tr ng-show="location.beacons.length === 0">
-                        <td class="text-center" colspan="3">No beacons belong to this location</td>
-                    </tr>
-                    <tr ng-repeat="beacon in location.beacons">
-                        <td><input required ng-model="beacon.major" class="col-xs-4" type="text"></td>
-                        <td><input required ng-model="beacon.minor" class="col-xs-4" type="text"></td>
-                        <td>
-                            <button ng-click="editBeacon($index)" class="btn">Edit</button> 
-                            <button ng-click="deleteBeacon($index)" class="btn btn-warning">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input required ng-model="newBeacon.major" class="col-xs-4" type="text"></td>
-                        <td><input required ng-model="newBeacon.minor" class="col-xs-4" type="text"></td>
-                        <td><button ng-click="addBeacon()" class="btn">Add</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div ng-show="msg_beacon_error" class="msg msg-warn">
+      <i class="fa fa-times"></i> {{msg_beacon_error}}
     </div>
+    <div class="normal-content">
+      <table>
+        <tbody>
+          <tr>
+            <td>Major</td>
+            <td>Minor</td>
+            <td>Action</td>
+          </tr>
+          <tr ng-show="location.beacons.length === 0">
+            <td class="text-center" colspan="3">No beacons belong to this location</td>
+          </tr>
+          <tr ng-repeat="beacon in location.beacons">
+            <td><input required ng-model="beacon.major" class="col-xs-4" type="text"></td>
+            <td><input required ng-model="beacon.minor" class="col-xs-4" type="text"></td>
+            <td>
+              <button ng-click="editBeacon($index)" class="btn">Edit</button> 
+              <button ng-click="deleteBeacon($index)" class="btn btn-warning">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td><input required ng-model="newBeacon.major" class="col-xs-4" type="text"></td>
+            <td><input required ng-model="newBeacon.minor" class="col-xs-4" type="text"></td>
+            <td><button ng-click="addBeacon()" class="btn">Add</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

@@ -1,65 +1,65 @@
 <div class="col-md-12 main-view">
-    <div class="col-lg-12 chart">
-        <div>
-            <div class="normal-header">
-                {{ location.name }}
-            </div>
-            <div class="normal-content">
-                <div class="col-lg-3  color-blue">
-                    <div class="fa fa-user icon-block"></div>
-                    <div class="text-center">{{ location.people }} People</div>
-                </div>
-                <div class="col-lg-3 color-red">
-                <a href="#/location/log/{{ location.id }}">
-                        <div class="fa fa-sign-out icon-block "></div>
-                        <div class="text-center">Transition Log</div>
-                    </a>
-                </div>
-                <div class="col-lg-3 color-green">
-                    <a ng-click="modal.open = true" href"#">
-                        <div class="fa fa-question-circle icon-block"></div>
-                        <div class="text-center">Send Question</div>
-                    </a>
-                </div>
-                <div class="col-lg-3  color-gray">
-                    <a href="#/location/edit/{{ location.id }}">
-                        <div class="fa fa-cog icon-block"></div>
-                        <div class="text-center">Setting</div>
-                    </a>
-                </div>
-                <table class="header-border">
-                    <thead>
-                        <tr>
-                            <th>Identifier</th>
-                            <th>Entered at</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-show="transitions.length === 0">
-                            <td class="text-center" colspan="2">No people in this location</td>
-                        </tr>
-                        <tr ng-repeat="transition in transitions | orderBy: '-createdAt'">
-                            <td>{{transition.identifier}}</td>
-                            <td><span relative-time current="transition.createdAt"></span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+  <div class="col-lg-12 chart">
+    <div>
+      <div class="normal-header">
+        {{ location.name }}
+      </div>
+      <div class="normal-content">
+        <div class="col-lg-3  color-blue">
+          <div class="fa fa-user icon-block"></div>
+          <div class="text-center">{{ location.people }} People</div>
         </div>
+        <div class="col-lg-3 color-red">
+          <a href="#/location/log/{{ location.id }}">
+            <div class="fa fa-sign-out icon-block "></div>
+            <div class="text-center">Transition Log</div>
+          </a>
+        </div>
+        <div class="col-lg-3 color-green">
+          <a ng-click="modal.open = true" href"#">
+            <div class="fa fa-question-circle icon-block"></div>
+            <div class="text-center">Send Question</div>
+          </a>
+        </div>
+        <div class="col-lg-3  color-gray">
+          <a href="#/location/edit/{{ location.id }}">
+            <div class="fa fa-cog icon-block"></div>
+            <div class="text-center">Setting</div>
+          </a>
+        </div>
+        <table class="header-border">
+          <thead>
+            <tr>
+              <th>Identifier</th>
+              <th>Entered at</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-show="transitions.length === 0">
+              <td class="text-center" colspan="2">No people in this location</td>
+            </tr>
+            <tr ng-repeat="transition in transitions | orderBy: '-createdAt'">
+              <td>{{transition.identifier}}</td>
+              <td><span relative-time current="transition.createdAt"></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 </div>
 
 <div ng-show="modal.open" class="custom_modal">
-    <div>
-        <div class="custom_modal_header">
-            Send a question
-        </div>
-        <div class="custom_modal_content">
-            <input ng-model="modal.content" type="text" required placeholder="KEEP Poll ID" />
-        </div>
-        <div class="custom_modal_footer">
-            <input ng-click="sendQuestion()" type="submit" value="Send">
-            <input ng-click="modal.open = false" class="warn" type="submit" value="Close">
-        </div>
+  <div>
+    <div class="custom_modal_header">
+      Send a question
     </div>
+    <div class="custom_modal_content">
+      <input ng-model="modal.content" type="text" required placeholder="KEEP Poll ID" />
+    </div>
+    <div class="custom_modal_footer">
+      <input ng-click="sendQuestion()" type="submit" value="Send">
+      <input ng-click="modal.open = false" class="warn" type="submit" value="Close">
+    </div>
+  </div>
 </div>
