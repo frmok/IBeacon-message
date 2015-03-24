@@ -10,7 +10,8 @@
 var jwt = require('jsonwebtoken');
 
 module.exports = function(req, res, next) {
-    jwt.verify(req.param("token"), sails.config.myconf.secret, function(err, decoded) {
+    var token = req.headers['usertoken'];
+    jwt.verify(token, sails.config.myconf.secret, function(err, decoded) {
         if (err || decoded.right !== 1) {
             return res.json('403', {
                 debug: 'Access Denied'

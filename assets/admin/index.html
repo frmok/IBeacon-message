@@ -25,6 +25,7 @@
 </head>
 <body ng-controller="mainController">
     <nav class="sidebar">
+        <img src="/bridge.png">
         <ul>
             <li class="cat">Location</li>
             <li ng-repeat="location in locations"><a href="#/location/{{ location.id}}">{{ location.name }}</a></li>

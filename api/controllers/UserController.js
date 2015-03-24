@@ -47,6 +47,10 @@ module.exports = {
                                 });
                             }
                         })
+                    } else {
+                        res.send(400, {
+                            error: "Invalid username or password."
+                        });
                     }
                 }
             });

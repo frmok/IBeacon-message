@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>iBeacon restaurant admin panel</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/style.css">
+    <!--jQuery 1.11.0-->
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+</head>
+<body>
+    <div class="login">
+        <form method="POST" action="http://rest/admin" accept-charset="UTF-8" id="adminLogin"><input name="_token" type="hidden" value="B7YqEhfkyDykCgGaPb9417MAVK19w4eMj2r52lS8">
+            <h1>iBeacon Message</h1>
+            <div class="form-group">
+                <label for="username"><i class="fa fa-user"></i></label>
+                <input id="username" placeholder="Username" class="col-xs-3" name="username" type="text" value="">
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fa fa-key"></i></label>
+                <input id="password" placeholder="Password" class="col-xs-3" name="password" type="password" value="">
+            </div>
+            <div class="form-group">
+                <input class="btn" type="submit" value="LOGIN">
+            </div>
+        </form>
+    </div>
+    <script>
+        $(document).ready(function(){
+            $('#adminLogin').submit(function(e){
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: '/user/login',
+                    data: {
+                        username: $('#username').val(),
+                        password: $('#password').val()
+                    },
+                    success: function(data){
+                        localStorage.setItem('token', data.token);
+                        window.location.replace("/admin");
+                    },
+                    error: function(data){
+                        alert('Wrong password.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
