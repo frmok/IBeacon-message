@@ -24,7 +24,7 @@
         </form>
     </div>
 
-    <div ng-show="location.beacons.length>0" class="list_layout">
+    <div ng-show="location.id > 0" class="list_layout">
         <div class="form-title">
             Beacons
         </div>
@@ -42,6 +42,9 @@
                         <td>Major</td>
                         <td>Minor</td>
                         <td>Action</td>
+                    </tr>
+                    <tr ng-show="location.beacons.length === 0">
+                        <td class="text-center" colspan="3">No beacons belong to this location</td>
                     </tr>
                     <tr ng-repeat="beacon in location.beacons">
                         <td><input required ng-model="beacon.major" class="col-xs-4" type="text"></td>

@@ -35,7 +35,11 @@ module.exports.policies = {
      *                                                                          *
      ***************************************************************************/
      LocationController: {
-        '*': ['adminAuth'],
+        'index': ['adminAuth'],
+        'detail': ['adminAuth'],
+        'create': ['adminAuth'],
+        'update': ['adminAuth'],
+        'delete': [],
      }
     // RabbitController: {
 

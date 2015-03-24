@@ -35,6 +35,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr ng-show="transitions.length === 0">
+                            <td class="text-center" colspan="2">No people in this location</td>
+                        </tr>
                         <tr ng-repeat="transition in transitions | orderBy: '-createdAt'">
                             <td>{{transition.identifier}}</td>
                             <td><span relative-time current="transition.createdAt"></span></td>

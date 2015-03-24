@@ -21,11 +21,21 @@ var app = angular.module('backendApp', [
         function($stateProvider, $urlRouterProvider) {
             $urlRouterProvider.otherwise('/location');
             $stateProvider.state("backend_location", {
+                resolve: {
+                    locations: ['Location', '$stateParams', function(Location, $stateParams) {
+                        return Location.all();
+                    }]
+                },
                 templateUrl: "/partials/location.html",
                 url: "/location",
-                controller: ['$rootScope', '$scope', '$stateParams',
-                    function($rootScope, $scope, $stateParams) {
+                controller: ['$rootScope', '$scope', '$stateParams', 'locations', 'Location',
+                    function($rootScope, $scope, $stateParams, locations, Location) {
                         $rootScope.currentAction = "Location Management";
+                        $scope.locations = locations.data;
+                        $scope.deleteLocation = function(index) {
+                            Location.delete($scope.locations[index]);
+                            $scope.locations.splice(index, 1);
+                        }
                     }
                 ]
 
@@ -45,6 +55,7 @@ var app = angular.module('backendApp', [
                 controller: ['$rootScope', '$scope', '$stateParams', 'Location', 'location', 'Beacon',
                     function($rootScope, $scope, $stateParams, Location, location, Beacon) {
                         $scope.location = {};
+                        $scope.newBeacon = {};
                         if ($stateParams.id) {
                             $scope.crud_action = $rootScope.currentAction = "Edit Location";
                             $scope.location = location.data;
@@ -64,13 +75,11 @@ var app = angular.module('backendApp', [
                                         console.log(res);
                                         $scope.msg_beacon = "Successfully added";
                                         $scope.location.beacons.push(res.data);
+                                        $scope.newBeacon = {};
                                     },
                                     function() {
                                         $scope.msg_beacon_error = "Error occurs";
                                     });
-                            $scope.newBeacon = {
-                                location_id: $scope.location.id
-                            };
                         }
                         $scope.editBeacon = function(index) {
                             var beacon = $scope.location.beacons[index];
@@ -86,8 +95,11 @@ var app = angular.module('backendApp', [
                                     });
                         }
                         $scope.deleteBeacon = function(index) {
-                            Beacon.delete($scope.location.beacons[index]);
-                            $scope.location.beacons.splice(index, 1);
+                            Beacon.delete($scope.location.beacons[index])
+                                .then(function(res) {
+                                    $scope.location.beacons.splice(index, 1);
+                                    $rootScope.updateLocationList();
+                                });
                         }
                         $scope.updateLocation = function() {
                             console.log($scope.location);
@@ -106,6 +118,7 @@ var app = angular.module('backendApp', [
                                         function(res) {
                                             $scope.msg = "Successfully added";
                                             $scope.location = res.data;
+                                            $scope.location.beacons = [];
                                             $rootScope.updateLocationList();
                                         });
                             }
@@ -223,6 +236,9 @@ app.factory('Location', ['$http', function($http) {
     };
     factory.update = function(location) {
         return $http.post('/location/update', location);
+    };
+    factory.delete = function(id) {
+        return $http.post('/location/delete/', id);
     };
     return factory;
 }]);

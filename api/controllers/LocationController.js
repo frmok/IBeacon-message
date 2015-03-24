@@ -15,7 +15,11 @@ module.exports = {
     index: function(req, res) {
         Location
             .find()
-            .populate('beacons')
+            .populate('transitions', {
+                where: {
+                    next_location: 0
+                }
+            })
             .exec(function(err, locations) {
                 if (err) {
                     res.send(500, {
@@ -173,9 +177,23 @@ module.exports = {
                         error: "FATAL ERROR"
                     });
                 } else {
-                    res.send(200, {
-                        debug: "SUCCESS"
-                    });
+                    //delete all the beacons belong to this location
+                    Beacon
+                        .find({
+                            location_id: id
+                        })
+                        .exec(function(err, beacons) {
+                            var beaconIDs = beacons.map(function(beacon) {
+                                return beacon.id;
+                            });
+                            Beacon.destroy({
+                                id: beaconIDs
+                            }).exec(function(err) {
+                                res.send(200, {
+                                    debug: "SUCCESS"
+                                });
+                            });
+                        });
                 }
             });
     },

@@ -17,6 +17,11 @@ module.exports = {
         beacons: {
             collection: 'beacon',
             via: 'location_id'
-        }
+        },
+
+        transitions: {
+            collection: 'transition',
+            via: 'location_id'
+        },
     }
 };
