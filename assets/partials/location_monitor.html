@@ -1,5 +1,5 @@
 <div class="col-md-12 main-view">
-    <div class="col-lg-12 chart ">
+    <div class="col-lg-12 chart">
         <div>
             <div class="normal-header">
                 {{ location.name }}
@@ -10,8 +10,10 @@
                     <div class="text-center">{{ location.people }} People</div>
                 </div>
                 <div class="col-lg-3 color-red">
-                    <div class="fa fa-sign-out icon-block "></div>
-                    <div class="text-center">Transition Log</div>
+                <a href="#/location/log/{{ location.id }}">
+                        <div class="fa fa-sign-out icon-block "></div>
+                        <div class="text-center">Transition Log</div>
+                    </a>
                 </div>
                 <div class="col-lg-3 color-green">
                     <a ng-click="modal.open = true" href"#">
@@ -33,7 +35,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="transition in transitions">
+                        <tr ng-repeat="transition in transitions | orderBy: '-createdAt'">
                             <td>{{transition.identifier}}</td>
                             <td><span relative-time current="transition.createdAt"></span></td>
                         </tr>

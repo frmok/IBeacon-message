@@ -2,6 +2,7 @@
 var app = angular.module('backendApp', [
         'ui.router',
         'ngSanitize',
+        'ui.bootstrap.datetimepicker',
     ])
     .run(['$rootScope', '$state', '$stateParams', '$http',
         function($rootScope, $state, $stateParams, $http) {
@@ -112,7 +113,30 @@ var app = angular.module('backendApp', [
                     }
                 ]
             });
-
+            $stateProvider.state("backend_location_log", {
+                resolve: {
+                    transitions: ['Transition', '$stateParams', function(Transition, $stateParams) {
+                        if ($stateParams.id) {
+                            return Transition.log($stateParams.id);
+                        }
+                        return;
+                    }]
+                },
+                templateUrl: "/partials/location_log.html",
+                url: "/location/log/{id}",
+                controller: ['$rootScope', '$scope', '$stateParams', 'transitions', '$filter',
+                    function($rootScope, $scope, $stateParams, transitions, $filter) {
+                        $rootScope.currentAction = 'Transition Log';
+                        $scope.transitions = transitions.data;
+                        $scope.onTimeSet = function(newDate, oldDate) {
+                            $scope.fromDate = $filter('date')(newDate, 'yyyy-MM-dd HH:mm:ss');
+                        }
+                        $scope.onTimeSet2 = function(newDate, oldDate) {
+                            $scope.toDate = $filter('date')(newDate, 'yyyy-MM-dd HH:mm:ss');
+                        }
+                    }
+                ]
+            });
             $stateProvider.state("backend_location_monitor", {
                 resolve: {
                     location: ['Location', '$stateParams', function(Location, $stateParams) {
@@ -159,7 +183,7 @@ var app = angular.module('backendApp', [
                         io.socket.on('transition_created', function(msg) {
                             if (msg.transition.location_id === $scope.location.id) {
                                 msg.transition.createdAt = moment(msg.transition.createdAt, 'YYYY-MM-DD HH:mm:ss').add('8', 'hours').format('YYYY-MM-DD HH:mm:ss');
-                                //add the new transitiion
+                                //add the new transition
                                 $scope.transitions.push(msg.transition);
                                 console.log($scope.transitions);
                                 //add total people
@@ -208,6 +232,9 @@ app.factory('Transition', ['$http', function($http) {
     factory.atLocation = function(id) {
         return $http.get('/transition/atLocation/' + id);
     };
+    factory.log = function(id) {
+        return $http.get('/transition/log/' + id);
+    };
     factory.sendQuestion = function(data) {
         return $http.post('/transition/sendQuestion/', data);
     };
@@ -236,6 +263,39 @@ app.filter('capitalizeFirst',
         }
     });
 
+app.filter('fromDate',
+    function() {
+        return function(transitions, fromDate) {
+            var filtered = [];
+            angular.forEach(transitions, function(transition) {
+                if (fromDate !== undefined && fromDate != "") {
+                    if (moment(transition.timestamp).isAfter(moment(fromDate))) {
+                        filtered.push(transition);
+                    }
+                } else {
+                    filtered.push(transition);
+                }
+            });
+            return filtered;
+        };
+    });
+
+app.filter('toDate',
+    function() {
+        return function(transitions, toDate) {
+            var filtered = [];
+            angular.forEach(transitions, function(transition) {
+                if (toDate !== undefined && toDate != "") {
+                    if (moment(transition.timestamp).isBefore(moment(toDate))) {
+                        filtered.push(transition);
+                    }
+                } else {
+                    filtered.push(transition);
+                }
+            });
+            return filtered;
+        };
+    });
 app.directive('relativeTime', ['$interval', 'dateFilter', function($interval, dateFilter) {
     return {
         scope: {

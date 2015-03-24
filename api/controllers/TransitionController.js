@@ -31,7 +31,7 @@ module.exports = {
     /**
      * This method returns the list of (non-left) transitions of a particular location
      *
-     * @method index
+     * @method atLocation
      * @param id {Integer} The id of location
      * @return {Array} Returns an array of transitions on success
      */
@@ -54,6 +54,55 @@ module.exports = {
     },
 
     /**
+     * This method returns the transition log of a location
+     *
+     * @method log
+     * @param id {Integer} The id of location
+     * @return {Array} Returns an array of transitions on success
+     */
+    log: function(req, res) {
+        var location_id = req.param("id");
+        Transition
+            .find({
+                location_id: location_id,
+                next_location: {
+                    '>': 0
+                }
+            })
+            .populate('location_id')
+            .populate('next_location')
+            .exec(function(err, transitions) {
+                if (err) {
+                    res.send(500, {
+                        error: "FATAL ERROR"
+                    });
+                } else {
+                    var transition_entered = [];
+                    var transition_left = [];
+                    var all_transitions = [];
+                    var moment = require('moment');
+                    transition_entered = JSON.parse(JSON.stringify(transitions));
+                    transition_left = JSON.parse(JSON.stringify(transitions));
+                    for (var i = 0; i < transition_entered.length; i++) {
+                        transition_entered[i].timestamp = moment(transition_entered[i].createdAt, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
+                        transition_entered[i].action = "Enter";
+                        all_transitions.push(transition_entered[i]);
+                    }
+                    for (var i = 0; i < transition_left.length; i++) {
+                        transition_left[i].timestamp = moment(transition_left[i].updatedAt, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
+                        if (transition_left[i].location_id.id === transition_left[i].next_location.id) {
+                            transition_left[i].action = "Leave";
+                        } else {
+                            transition_left[i].action = "Go to " + transition_left[i].next_location.name;
+                        }
+                        all_transitions.push(transition_left[i]);
+                    }
+                    res.send(all_transitions);
+                }
+            });
+    },
+
+    /**
      * This method creates a new transition and returns it
      *
      * @method create
@@ -71,7 +120,6 @@ module.exports = {
             })
             .exec(function(err, transition) {
                 if (err) {
-                    console.log(err);
                     res.send(500, {
                         error: "FATAL ERROR"
                     });
@@ -92,15 +140,14 @@ module.exports = {
     update: function(req, res) {
         var id = req.param("id");
         var next_location = req.param("next_location");
-        Transition.
-        update({
+        Transition
+            .update({
                 id: id
             }, {
                 next_location: next_location
             })
             .exec(function(err, transition) {
                 if (err) {
-                    console.log(err);
                     res.send(500, {
                         error: "FATAL ERROR"
                     });
@@ -110,6 +157,14 @@ module.exports = {
             });
     },
 
+    /**
+     * This method sends a KEEP Poll question to all (non-left) transition of a locaiton
+     *
+     * @method sendQuestion
+     * @param pollID {Integer} The id of KEEP Poll question
+     * @param location_id {Integer} The id of location
+     * @return {Object} Returns a object with debug message
+     */
     sendQuestion: function(req, res) {
         var pollID = req.param("pollID");
         var location_id = req.param("location_id");

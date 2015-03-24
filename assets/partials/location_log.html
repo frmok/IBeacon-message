@@ -1,0 +1,44 @@
+<div class="col-md-12 main-view">
+    <div class="table-control">
+        <div class="dropdown">
+            <a class="dropdown-toggle" id="dropdown" role="button" data-toggle="dropdown">
+            <div class="input-group"><input type="text" class="form-control" data-ng-model="fromDate" placeholder="From Date">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                </div>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <datetimepicker data-ng-model="data.dateDropDownInput" data-on-set-time="onTimeSet(newDate, oldDate)" data-datetimepicker-config="{ dropdownSelector: '#dropdown' }"/>
+            </ul>
+        </div>
+        <div class="dropdown">
+            <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown">
+            <div class="input-group"><input type="text" class="form-control" data-ng-model="toDate" placeholder="To Date">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                </div>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <datetimepicker data-ng-model="data.dateDropDownInput" data-on-set-time="onTimeSet2(newDate, oldDate)" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"/>
+            </ul>
+        </div>
+    </div>
+    <div class="chart">
+        <div class="normal-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Identifier</th>
+                        <th>Action</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="transition in transitions | fromDate:fromDate | toDate:toDate | orderBy: '-timestamp'">
+                        <td>{{transition.identifier}}</td>
+                        <td>{{transition.action}}</td>
+                        <td>{{transition.timestamp}}</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
