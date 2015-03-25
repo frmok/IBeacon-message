@@ -21,6 +21,20 @@ module.exports = {
       Push.send(pollID);
     },
   },
+  /**
+  LIFECYCLE CALLBACK
+  **/
+  beforeCreate: function(transition, cb) {
+    Transition
+      .update({
+        identifier: transition.identifier
+      }, {
+        next_location: transition.location_id
+      })
+      .exec(function(err, transition) {
+        cb();
+      });
+  },
   afterCreate: function(transition, cb) {
     var subscribers = sails.sockets.subscribers('transition');
     sails.sockets.emit(subscribers, 'transition_created', {
@@ -34,5 +48,5 @@ module.exports = {
       transition: transition
     });
     cb();
-  }
+  },
 };

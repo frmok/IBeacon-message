@@ -90,12 +90,14 @@ module.exports = {
           }
           for (var i = 0; i < transition_left.length; i++) {
             transition_left[i].timestamp = moment(transition_left[i].updatedAt, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
-            if (transition_left[i].location_id.id === transition_left[i].next_location.id) {
-              transition_left[i].action = "Leave";
-            } else {
-              transition_left[i].action = "Go to " + transition_left[i].next_location.name;
+            if (transition_left[i].next_location) {
+              if (transition_left[i].location_id.id === transition_left[i].next_location.id) {
+                transition_left[i].action = "Leave";
+              } else {
+                transition_left[i].action = "Go to " + transition_left[i].next_location.name;
+              }
+              all_transitions.push(transition_left[i]);
             }
-            all_transitions.push(transition_left[i]);
           }
           res.send(all_transitions);
         }

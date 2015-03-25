@@ -23,6 +23,9 @@ module.exports = {
     }
 
   },
+  /**
+  LIFECYCLE CALLBACK
+  **/
   beforeCreate: function(attrs, next) {
     var bcrypt = require('bcrypt');
     bcrypt.genSalt(10, function(err, salt) {
