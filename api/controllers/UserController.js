@@ -14,9 +14,10 @@ module.exports = {
    * This method checks the credential and returna JWT token
    *
    * @method login
-   * @param username {String} The username
-   * @param password {String} The password
-   * @return {Object} Returns a object with JWT token
+   * @param {Object} req - The request object
+   * @param {String} req.body.username - The username
+   * @param {String} req.body.password - The password
+   * @param {Object} res - The response object
    */
   login: function(req, res) {
     var username = req.param("username");
@@ -61,9 +62,10 @@ module.exports = {
    * This method creates a new user
    *
    * @method create
-   * @param username {String} The username
-   * @param password {String} The password
-   * @return {Object} Returns a object with debug message
+   * @param {Object} req - The request object
+   * @param {String} req.body.username - The username
+   * @param {String} req.body.password - The password
+   * @param {Object} res - The response object
    */
   create: function(req, res) {
     var username = req.param("username");

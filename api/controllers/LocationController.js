@@ -10,7 +10,8 @@ module.exports = {
    * This method returns the list of locations
    *
    * @method index
-   * @return {Array} Returns an array of locations on success
+   * @param {Object} req - The request object
+   * @param {Object} res - The response object
    */
   index: function(req, res) {
     Location
@@ -35,8 +36,9 @@ module.exports = {
    * This method returns the data of a location
    *
    * @method detail
-   * @param id {Integer} The id of location
-   * @return {Object} Returns data of a location on success
+   * @param {Object} req - The request object
+   * @param {Integer} req.body.id - The id of location
+   * @param {Object} res - The response object
    */
   detail: function(req, res) {
     var id = req.param("id");
@@ -69,9 +71,10 @@ module.exports = {
    * This method returns the data of a location
    *
    * @method getByBeacon
-   * @param major {Integer} The major of beacon
-   * @param minor {Integer} The minor of beacon
-   * @return {Object} Returns data of a location on success
+   * @param {Object} req - The request object
+   * @param {Integer} req.query.major - The major of beacon
+   * @param {Integer} req.query.minor - The minor of beacon
+   * @param {Object} res - The response object
    */
   getByBeacon: function(req, res) {
     var major = req.param("major");
@@ -101,9 +104,10 @@ module.exports = {
    * This method creates a new location and returns it
    *
    * @method create
-   * @param name {String} The name of location
-   * @param disabled {Integer} Whether the location is disabled
-   * @return {Object} Returns a location object on success
+   * @param {Object} req - The request object
+   * @param {String} req.body.name - The name of location
+   * @param {Integer} req.body.disabled - Whether the location is disabled (1:YES, 0:NO)
+   * @param {Object} res - The response object
    */
   create: function(req, res) {
     var name = req.param("name");
@@ -129,10 +133,11 @@ module.exports = {
    * This method updates a existing location and returns it
    *
    * @method update
-   * @param id {Integer} The id of location
-   * @param name {String} The name of location
-   * @param disabled {Integer} Whether the location is disabled
-   * @return {Object} Returns a location object on success
+   * @param {Object} req - The request object
+   * @param {Integer} req.body.id - The id of location
+   * @param {String} req.body.name - The name of location
+   * @param {Integer} req.body.disabled - Whether the location is disabled (1:YES, 0:NO)
+   * @param {Object} res - The response object
    */
   update: function(req, res) {
     var id = req.param("id");
@@ -161,8 +166,9 @@ module.exports = {
    * This method deletes a location
    *
    * @method delete
-   * @param id {Integer} The id of location
-   * @return {Object} Returns a object with debug message
+   * @param {Object} req - The request object
+   * @param {Integer} req.body.id - The id of location
+   * @param {Object} res - The response object
    */
   delete: function(req, res) {
     var id = req.param("id");

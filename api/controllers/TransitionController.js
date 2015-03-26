@@ -10,7 +10,8 @@ module.exports = {
    * This method returns the list of transitions
    *
    * @method index
-   * @return {Array} Returns an array of transitions on success
+   * @param {Object} req - The request object
+   * @param {Object} res - The response object
    */
   index: function(req, res) {
     Transition
@@ -32,8 +33,9 @@ module.exports = {
    * This method returns the list of (non-left) transitions of a particular location
    *
    * @method atLocation
-   * @param id {Integer} The id of location
-   * @return {Array} Returns an array of transitions on success
+   * @param {Object} req - The request object
+   * @param {Integer} req.params.id - The id of location
+   * @param {Object} res - The response object
    */
   atLocation: function(req, res) {
     var location_id = req.param("id");
@@ -58,7 +60,9 @@ module.exports = {
    *
    * @method log
    * @param id {Integer} The id of location
-   * @return {Array} Returns an array of transitions on success
+   * @param {Object} req - The request object
+   * @param {Integer} req.params.id - The id of location
+   * @param {Object} res - The response object
    */
   log: function(req, res) {
     var location_id = req.param("id");
@@ -108,9 +112,10 @@ module.exports = {
    * This method creates a new transition and returns it
    *
    * @method create
-   * @param identifier {String} The device token
-   * @param location_id {String} The id of location
-   * @return {Object} Returns a location object on success
+   * @param {Object} req - The request object
+   * @param {String} req.body.identifier - The device token
+   * @param {Integer} req.body.location_id - The id of location
+   * @param {Object} res - The response object
    */
   create: function(req, res) {
     var identifier = req.param("identifier");
@@ -135,9 +140,10 @@ module.exports = {
    * This method updates a existing transition and returns it
    *
    * @method update
-   * @param id {Integer} The id of transition
-   * @param next_location {String} The id of next location
-   * @return {Object} Returns a location object on success
+   * @param {Object} req - The request object
+   * @param {Integer} req.body.id - The id of transition
+   * @param {String} req.body.next_location - The id of next location
+   * @param {Object} res - The response object
    */
   update: function(req, res) {
     var id = req.param("id");
@@ -163,9 +169,10 @@ module.exports = {
    * This method sends a KEEP Poll question to all (non-left) transition of a locaiton
    *
    * @method sendQuestion
-   * @param pollID {Integer} The id of KEEP Poll question
-   * @param location_id {Integer} The id of location
-   * @return {Object} Returns a object with debug message
+   * @param {Object} req - The request object
+   * @param {Integer} req.body.pollID - The id of KEEP Poll question
+   * @param {Integer} req.body.location_id - The id of location
+   * @param {Object} res - The response object
    */
   sendQuestion: function(req, res) {
     var pollID = req.param("pollID");
@@ -185,7 +192,7 @@ module.exports = {
           for (i = 0; i < transitions.length; i++) {
             identifiers.push(transitions[i].identifier);
           }
-          Push.send(pollID, identifiers);
+          Push.sendQuestion(pollID, identifiers);
           res.json({
             message: 'Successfully sent'
           });
@@ -193,6 +200,13 @@ module.exports = {
       });
   },
 
+  /**
+   * This method allows client to subscribe to the transition update
+   *
+   * @method subscribeToTransition
+   * @param {Object} req - The request object
+   * @param {Object} res - The response object
+   */
   subscribeToTransition: function(req, res) {
     var roomName = 'transition';
     sails.sockets.join(req.socket, roomName);

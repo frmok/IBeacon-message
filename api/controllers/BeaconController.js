@@ -10,7 +10,8 @@ module.exports = {
    * This method returns the list of beacons
    *
    * @method index
-   * @return {Array} Returns an array of beacons on success
+   * @param {Object} req - The request object
+   * @param {Object} res - The response object
    */
   index: function(req, res) {
     Beacon
@@ -31,10 +32,11 @@ module.exports = {
    * This method creates a new beacon and returns it
    *
    * @method create
-   * @param major {Integer} The major of beacon
-   * @param minor {Integer} The minor of beacon
-   * @param location_id {Integer} The id of location
-   * @return {Object} Returns a beacon object on success
+   * @param {Object} req - The request object
+   * @param {Integer} req.body.minor - The major of beacon
+   * @param {Integer} req.body.major - The minor of beacon
+   * @param {Integer} req.body.location_id - The id of location
+   * @param {Object} res - The response object
    */
   create: function(req, res) {
     var major = req.param("major");
@@ -62,9 +64,11 @@ module.exports = {
    * This method updates a existing beacon and returns it
    *
    * @method update
-   * @param major {Integer} The major of beacon
-   * @param minor {Integer} The minor of beacon
-   * @return {Object} Returns a beacon object on success
+   * @param {Object} req - The request object
+   * @param {Integer} req.body.id - The id of beacon
+   * @param {Integer} req.body.minor - The major of beacon
+   * @param {Integer} req.body.major - The minor of beacon
+   * @param {Object} res - The response object
    */
   update: function(req, res) {
     var id = req.param("id");
@@ -93,8 +97,9 @@ module.exports = {
    * This method deletes a beacon
    *
    * @method delete
-   * @param id {Integer} The id of beacon
-   * @return {Object} Returns a object with debug message
+   * @param {Object} req - The request object
+   * @param {Integer} req.body.id - The id of beacon
+   * @param {Object} res - The response object
    */
   delete: function(req, res) {
     var id = req.param("id");
