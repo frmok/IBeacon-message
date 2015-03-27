@@ -153,7 +153,7 @@ var app = angular.module('backendApp', [
             console.log("jobs", jobs.data);
             $scope.jobs = jobs.data;
             $scope.deleteJob = function(index) {
-              Job.delete($scope.jobs[index]._id)
+              Job.delete({id: $scope.jobs[index]._id})
                 .then(function(res) {
                   console.log(res);
                   $scope.jobs.splice(index, 1);
@@ -178,7 +178,7 @@ var app = angular.module('backendApp', [
             $rootScope.currentAction = 'Create new Job';
 
             $scope.crud_action = 'Create new Job';
-            $scope.addJob = function($scope.job) {
+            $scope.addJob = function() {
               Job.create($scope.job)
                 .then(function(res) {
                     console.log(res);
