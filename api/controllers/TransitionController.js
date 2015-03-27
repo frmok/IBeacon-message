@@ -5,63 +5,30 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
- var mylog = (function() {
-	var time = [];
-	var clc = require('cli-color');
-
-	function colorText(id) {
-		var f = [clc.white, clc.red, clc.green, clc.yellow, clc.blue, clc.magenta, clc.cyan, clc.black];
-		return f[(id % f.length)];
-	}
-
-	return function(string, id) {
-		if (!id) id = 0;
-		if (!time[id]) time[id] = (new Date()).getTime();
-		var currentTime = (new Date()).getTime();
-
-		var sss = ['\t'.concat(id.toString()), (currentTime - time[id]).toString().concat('ms'), string].join(' ');
-
-		console.log(colorText(id)(sss));
-		time[id] = currentTime;
-	};
-})();
-
 var Agenda = require('agenda');
-var agenda = new Agenda({db: { address: 'localhost:27017'}});
-agenda.start();
-
-agenda.define('print msg', function(job, done) {
-  mylog("abc 1232", 1);
-  done();
+var agenda = new Agenda({
+  db: {
+    address: 'localhost:27017'
+  }
 });
-mylog("abc 1232", 1);
-agenda.schedule('in 20 seconds', 'print msg').repeatEvery('3 seconds');
-
 module.exports = {
 
-	//http://localhost:1337/transition/test/?msg=xxx&delay=3000
-	test: function(req, res) {
-		var msg = req.query.msg;
-		var current = new Date();
-		var delay = req.query.delay;
+  //http://localhost:1337/transition/test/?msg=xxx&delay=3000
+  test: function(req, res) {
+    var msg = req.query.msg;
+    var current = new Date();
+    var delay = req.query.delay;
 
-		agenda.define('push msg', function(job, done) {
-			var pushMsg = job.attrs.data.msg;
-			mylog(pushMsg, 2);
-			// server push msg
-			// unlock the job for async
-			done();
-		});
+    //agenda.cancel({}, function(err, numRemoved) {});
+    //agenda.every('5 seconds', 'delete old users');
+    agenda.schedule(new Date(new Date().getTime()+15000), 'delete old users');
+    agenda.jobs({}, function(err, jobs) {
+      // Check the job list
+      console.log(jobs);
+      res.send(jobs).end();
+    });
 
-		agenda.schedule('in 3 seconds', 'push msg', {msg: 'push me~~!!'});
-
-		mylog(current.toLocaleString())
-		setTimeout(function () {
-			mylog(msg, 2);
-		}, delay);
-
-		res.send("abc").end();
-	},
+  },
 
 
 
