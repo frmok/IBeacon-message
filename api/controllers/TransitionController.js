@@ -8,7 +8,7 @@
 var Agenda = require('agenda');
 var agenda = new Agenda({
   db: {
-    address: 'localhost:27017'
+    address: 'localhost:27017/agenda-example'
   }
 });
 module.exports = {
