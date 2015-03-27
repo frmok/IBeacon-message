@@ -126,6 +126,86 @@ var app = angular.module('backendApp', [
           }
         ]
       });
+
+
+
+
+
+
+
+
+
+
+
+
+      $stateProvider.state("backend_job_list", {
+        resolve: {
+          jobs: ['Job', '$stateParams', function(Job, $stateParams) {
+            return Job.index();
+          }]
+        },
+        templateUrl: "/partials/job_list.html",
+        url: "/location/job/",
+        controller: ['$rootScope', '$scope', '$stateParams', 'Job', 'jobs', '$filter',
+          function($rootScope, $scope, $stateParams, Job, jobs, $filter) {
+            $rootScope.currentAction = 'Job List';
+
+            console.log("jobs", jobs.data);
+            $scope.jobs = jobs.data;
+            $scope.deleteJob = function(index) {
+              Job.delete($scope.jobs[index]._id)
+                .then(function(res) {
+                  console.log(res);
+                  $scope.jobs.splice(index, 1);
+                  console.log("remaining jobs list", $scope.jobs);
+                  // $rootScope.updateLocationList();
+                })
+                .catch(function(res) {
+                  console.log(res);
+                  $scope.jobs.splice(index, 1);
+                  console.log("remaining jobs list", $scope.jobs);
+                });
+            }
+          }
+        ]
+      });
+      $stateProvider.state("backend_job_detail", {
+        resolve: {},
+        templateUrl: "/partials/job_detail.html",
+        url: "/location/job/add/",
+        controller: ['$rootScope', '$scope', '$stateParams', 'Job', '$filter',
+          function($rootScope, $scope, $stateParams, Job, $filter) {
+            $rootScope.currentAction = 'Create new Job';
+
+            $scope.crud_action = 'Create new Job';
+            $scope.addJob = function($scope.job) {
+              Job.create($scope.job)
+                .then(function(res) {
+                    console.log(res);
+                });
+            };
+
+            $scope.job = {};
+            // form models
+            // $scope.job.name
+            $scope.job.type = 1;
+            // $scope.job.startDate
+            // $scope.job.endDate
+            $scope.job.repeatInterval = 0;
+            // $scope.job.message
+          }
+        ]
+      });
+
+
+
+
+
+
+
+
+
+
       $stateProvider.state("backend_location_log", {
         resolve: {
           transitions: ['Transition', '$stateParams', function(Transition, $stateParams) {
@@ -267,6 +347,21 @@ app.factory('Beacon', ['$http', function($http) {
   };
   factory.delete = function(id) {
     return $http.post('/beacon/delete/', id);
+  };
+  return factory;
+}]);
+
+app.factory('Job', ['$http', function($http) {
+  var factory = {};
+  factory.index = function() {
+    return $http.get('/agenda/index');
+  };
+  factory.create = function(job) {
+    return $http.post('/agenda/create/', job);
+  };
+  factory.delete = function(id) {
+    console.log(id);
+    return $http.post('/agenda/delete/', id);
   };
   return factory;
 }]);
