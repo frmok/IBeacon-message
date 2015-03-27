@@ -19,7 +19,7 @@ module.exports = {
     var current = new Date();
     var delay = req.query.delay;
 
-    //agenda.cancel({}, function(err, numRemoved) {});
+    agenda.cancel({}, function(err, numRemoved) {});
     //agenda.every('5 seconds', 'delete old users');
     agenda.schedule(new Date(new Date().getTime()+15000), 'delete old users');
     agenda.jobs({}, function(err, jobs) {
