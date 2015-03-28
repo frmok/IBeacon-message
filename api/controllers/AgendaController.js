@@ -9,30 +9,30 @@ var Agenda = require('agenda');
 var mongodb = require('mongodb');
 var agenda = new Agenda({
   db: {
-    address: 'localhost:27017/agenda-example'
+    address: 'direct.andymok.me:27017/agenda-example'
   }
 });
 module.exports = {
-
   index: function(req, res) {
     agenda.jobs({}, function(err, jobs) {
       if (jobs.length == 0) {
         res.send(jobs);
-      }
-      for (i in jobs) {
-        (function(jobs, i) {
-          Location
-            .find({
-              id: jobs[i].attrs.data.location_id
-            }).exec(function(err, location) {
-              jobs[i].attrs.location = location[0].name;
-              if (i == jobs.length - 1) {
-                (function(jobs) {
-                  res.send(jobs);
-                })(jobs);
-              }
-            });
-        })(jobs, i)
+      } else {
+        for (i in jobs) {
+          (function(jobs, i) {
+            Location
+              .find({
+                id: jobs[i].attrs.data.location_id
+              }).exec(function(err, location) {
+                jobs[i].attrs.location = location[0].name;
+                if (i == jobs.length - 1) {
+                  (function(jobs) {
+                    res.send(jobs);
+                  })(jobs);
+                }
+              });
+          })(jobs, i)
+        }
       }
     });
   },
@@ -84,7 +84,7 @@ module.exports = {
                 agenda_id: job.attrs._id.toString()
               })
               .exec(function(err, record) {
-                if(err){
+                if (err) {
                   console.log(err);
                 }
               });

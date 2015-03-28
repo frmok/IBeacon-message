@@ -9,11 +9,11 @@
  * http://sailsjs.org/#/documentation/reference/sails.config/sails.config.bootstrap.html
  */
 var MongoClient = require('mongodb').MongoClient;
-var _agendaURL = 'mongodb://localhost:27017/agenda-example';
+var _agendaURL = 'mongodb://direct.andymok.me:27017/agenda-example';
 var Agenda = require('agenda');
 var agenda = new Agenda({
   db: {
-    address: 'localhost:27017/agenda-example'
+    address: 'direct.andymok.me:27017/agenda-example'
   }
 });
 
