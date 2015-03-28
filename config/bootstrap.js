@@ -37,7 +37,6 @@ module.exports.bootstrap = function(cb) {
       w: 1,
       multi: true
     }, function(err, result) {
-      console.log(result);
       _continueBoostrap();
     });
   });
@@ -66,7 +65,17 @@ module.exports.bootstrap = function(cb) {
                 for (i = 0; i < transitions.length; i++) {
                   identifiers.push(transitions[i].identifier);
                 }
-                Push.sendQuestion('4', identifiers);
+                Push.sendMessage(msg, identifiers);
+                Record
+                  .create({
+                    people_count: identifiers.length,
+                    agenda_id: job.attrs._id.toString()
+                  })
+                  .exec(function(err, record) {
+                    if (err) {
+                      console.log(err);
+                    }
+                  });
               });
           }
           if (currentDate < endDate) {

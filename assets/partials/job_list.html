@@ -19,6 +19,7 @@
             <td>{{job.data.endDate | timestampToTime}}</td>
             <td>{{job.location}}</td>
             <td>
+              <a href="#/location/job/detail/{{job._id}}"><button class="btn">View</button></a>
             	<button ng-click="deleteJob($index)" class="btn btn-warning">Delete</button>
             </td>
           </tr>

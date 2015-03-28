@@ -16,6 +16,9 @@ module.exports = {
 
   index: function(req, res) {
     agenda.jobs({}, function(err, jobs) {
+      if (jobs.length == 0) {
+        res.send(jobs);
+      }
       for (i in jobs) {
         (function(jobs, i) {
           Location
@@ -31,6 +34,20 @@ module.exports = {
             });
         })(jobs, i)
       }
+    });
+  },
+
+  detail: function(req, res) {
+    var id = req.param('id');
+    agenda.jobs({
+      _id: mongodb.ObjectID(id)
+    }, function(err, jobs) {
+      if (err) {
+        res.send(500, {
+          error: "FATAL ERROR"
+        });
+      }
+      res.send(jobs[0]);
     });
   },
 
@@ -60,7 +77,17 @@ module.exports = {
             for (i = 0; i < transitions.length; i++) {
               identifiers.push(transitions[i].identifier);
             }
-            Push.sendQuestion('4', identifiers);
+            Push.sendMessage(msg, identifiers);
+            Record
+              .create({
+                people_count: identifiers.length,
+                agenda_id: job.attrs._id.toString()
+              })
+              .exec(function(err, record) {
+                if(err){
+                  console.log(err);
+                }
+              });
           });
       }
       if (currentDate < endDate) {

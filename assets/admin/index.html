@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>iBeacon restaurant admin panel</title>
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="/bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css"/>
   <link rel="stylesheet" href="/styles/style.css">
   <!--jQuery-->
-  <script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
   <!--Moment (should be put before Angular)-->
   <script src="/bower_components/moment/moment.js"></script>
   <!--AngularJS-->
@@ -28,12 +28,12 @@
     <img src="/bridge.png">
     <ul>
       <li class="cat">Location</li>
-      <li ng-repeat="location in locations"><a href="#/location/{{ location.id}}">{{ location.name }}</a></li>
+      <li ng-repeat="location in locations"><a href="#/location/{{ location.id }}">{{ location.name }}</a></li>
       <li><a href="#/location">Location Management</a></li>
       <li><a href="#/location/edit/">Add Location</a></li>
       <li class="cat">Advertisement</li>
       <li><a href="#/location/job/">Advertisement Management</a></li>
-      <li><a href="#/location/job/add/">Add Advertisement</a></li>
+      <li><a href="#/location/job/detail/">Add Advertisement</a></li>
     </ul>
   </nav>
   <div class="main">

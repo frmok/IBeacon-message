@@ -162,16 +162,28 @@ var app = angular.module('backendApp', [
       $stateProvider.state("backend_job_detail", {
         resolve: {},
         templateUrl: "/partials/job_detail.html",
-        url: "/location/job/add/",
+        url: "/location/job/detail/{id}",
         resolve: {
           locations: ['Location', '$stateParams', function(Location, $stateParams) {
             return Location.all();
-          }]
+          }],
+          job: ['Job', '$stateParams', function(Job, $stateParams) {
+            if ($stateParams.id) {
+              return Job.get($stateParams.id);
+            }
+            return;
+          }],
+          adRecords: ['AdRecord', '$stateParams', function(AdRecord, $stateParams) {
+            if ($stateParams.id) {
+              return AdRecord.byAdvertisement($stateParams.id);
+            }
+            return;
+          }],
         },
-        controller: ['$rootScope', '$scope', '$stateParams', 'Job', '$filter', 'locations',
-          function($rootScope, $scope, $stateParams, Job, $filter, locations) {
-            $rootScope.currentAction = 'Create new Job';
-            $scope.crud_action = 'Create new Job';
+        controller: ['$rootScope', '$scope', '$stateParams', 'Job', '$filter', 'locations', 'job', 'adRecords',
+          function($rootScope, $scope, $stateParams, Job, $filter, locations, job, adRecords) {
+            $rootScope.currentAction = 'Create new advertisement';
+            $scope.crud_action = 'Create new advertisement';
             $scope.locations = locations.data;
             $scope.onTimeSet = function(newDate, oldDate) {
               $scope.startDate = $filter('date')(newDate, 'yyyy-MM-dd HH:mm:ss');
@@ -194,10 +206,23 @@ var app = angular.module('backendApp', [
                   $scope.startDate = $scope.endDate = "";
                 });
             };
-            $scope.job = {};
-            $scope.job.location_id = $scope.locations[0].id;
-            $scope.job.type = 1;
-            $scope.job.repeatInterval = 1;
+            if ($stateParams.id) {
+              $scope.adRecords = adRecords.data;
+              $rootScope.currentAction = 'Advertisement';
+              $scope.crud_action = 'Advertisement';
+              $scope.job = job.data;
+              $scope.job.type = 1;
+              $scope.job.location_id = job.data.data.location_id;
+              $scope.startDate = moment.unix(job.data.data.startDate / 1000).format('YYYY-MM-DD HH:mm:ss');
+              $scope.endDate = moment.unix(job.data.data.endDate / 1000).format('YYYY-MM-DD HH:mm:ss');
+              $scope.job.repeatInterval = job.data.data.repeatInterval;
+              $scope.job.msg = job.data.data.msg;
+            } else {
+              $scope.job = {};
+              $scope.job.location_id = $scope.locations[0].id;
+              $scope.job.type = 1;
+              $scope.job.repeatInterval = 1;
+            }
           }
         ]
       });
@@ -352,12 +377,26 @@ app.factory('Job', ['$http', function($http) {
   factory.index = function() {
     return $http.get('/agenda/index');
   };
+  factory.get = function(id) {
+    return $http.get('/agenda/detail/' + id);
+  };
   factory.create = function(job) {
     return $http.post('/agenda/create/', job);
   };
   factory.delete = function(id) {
     console.log(id);
     return $http.post('/agenda/delete/', id);
+  };
+  return factory;
+}]);
+
+app.factory('AdRecord', ['$http', function($http) {
+  var factory = {};
+  factory.byAdvertisement = function(id) {
+    return $http.get('/record/byAdvertisement/' + id);
+  };
+  factory.create = function(job) {
+    return $http.post('/record/create/', job);
   };
   return factory;
 }]);

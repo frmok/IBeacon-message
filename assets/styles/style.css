@@ -372,6 +372,15 @@ nav.sidebar ul > li > a:hover{
     border: 1px solid #ccc;
 }
 
+.form-layout input[disabled],
+.form-layout select[disabled],
+.form-layout textarea[disabled]{
+    cursor: not-allowed;
+    background-color: #EEE;
+    opacity: 1;
+    color: #000;
+}
+
 .form-layout input[type=file]{
     position: absolute;
     cursor: pointer;

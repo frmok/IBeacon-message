@@ -5,32 +5,7 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
-var Agenda = require('agenda');
-var agenda = new Agenda({
-  db: {
-    address: 'localhost:27017/agenda-example'
-  }
-});
 module.exports = {
-
-  //http://localhost:1337/transition/test/?msg=xxx&delay=3000
-  test: function(req, res) {
-    var msg = req.query.msg;
-    var current = new Date();
-    var delay = req.query.delay;
-
-    agenda.cancel({}, function(err, numRemoved) {});
-    //agenda.every('5 seconds', 'delete old users');
-    agenda.schedule(new Date(new Date().getTime()+15000), 'delete old users');
-    agenda.jobs({}, function(err, jobs) {
-      // Check the job list
-      console.log(jobs);
-      res.send(jobs).end();
-    });
-
-  },
-
-
 
   /**
    * This method returns the list of transitions

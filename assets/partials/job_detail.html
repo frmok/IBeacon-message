@@ -10,17 +10,17 @@
         <i class="fa fa-check"></i> {{msg}}
       </div>
       <div class="form-group first-group">
-        <label for="job_name" class="col-xs-3">Job Name</label>
-        <input required ng-model="job.name" class="col-xs-4" name="name" type="text" id="job_name">
+        <label for="job_name" class="col-xs-3">Advertisement Name</label>
+        <input ng-disabled="job._id != null" required ng-model="job.name" class="col-xs-4" name="name" type="text" id="job_name">
       </div>
       <div class="form-group">
         <label for="job_type" class="col-xs-3">Location</label>
-        <select id="location_id" ng-model="job.location_id" ng-options="location.id as location.name for location in locations">
+        <select ng-disabled="job._id != null" id="location_id" ng-model="job.location_id" ng-options="location.id as location.name for location in locations">
         </select>
       </div>
       <div class="form-group">
         <label for="job_type" class="col-xs-3">Job Type</label>
-        <select id="job_type" ng-model="job.type">
+        <select ng-disabled="job._id != null" id="job_type" ng-model="job.type">
           <option value="0">One-off</option>
           <option value="1">Repetitive</option>
         </select>
@@ -31,7 +31,7 @@
           <label for="job_start_date" class="col-xs-3">Trigger Date</label>
           <div class="dropdown">
             <a class="dropdown-toggle" id="dropdown" role="button" data-toggle="dropdown">
-              <input type="text" class="form-control" data-ng-model="startDate" placeholder="Start Date">
+              <input ng-disabled="job._id != null" type="text" class="form-control" data-ng-model="startDate" placeholder="Start Date">
             </a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
               <datetimepicker data-ng-model="data.dateDropDownInput" data-on-set-time="onTimeSet(newDate, oldDate)" data-datetimepicker-config="{ dropdownSelector: '#dropdown' }"/>
@@ -45,7 +45,7 @@
           <label for="job_start_date" class="col-xs-3">Start Date</label>
           <div class="dropdown">
             <a class="dropdown-toggle" id="dropdown" role="button" data-toggle="dropdown">
-              <input type="text" class="form-control" data-ng-model="startDate" placeholder="Start Date">
+              <input ng-disabled="job._id != null" type="text" class="form-control" data-ng-model="startDate" placeholder="Start Date">
             </a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
               <datetimepicker data-ng-model="data.dateDropDownInput" data-on-set-time="onTimeSet(newDate, oldDate)" data-datetimepicker-config="{ dropdownSelector: '#dropdown' }"/>
@@ -56,7 +56,7 @@
           <label for="job_end_date" class="col-xs-3">End Date</label>
           <div class="dropdown">
             <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown">
-              <input type="text" class="form-control" data-ng-model="endDate" placeholder="End Date">
+              <input ng-disabled="job._id != null" type="text" class="form-control" data-ng-model="endDate" placeholder="End Date">
             </a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
               <datetimepicker data-ng-model="data.dateDropDownInput" data-on-set-time="onTimeSet2(newDate, oldDate)" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"/>
@@ -64,18 +64,39 @@
           </div></div>
           <div class="form-group">
             <label for="job_repeat_interval" class="col-xs-3">Repeat Interval</label>
-            <input required ng-model="job.repeatInterval" class="col-xs-4" name="repeat_interval" type="number" id="job_repeat_interval" min="0">
+            <input ng-disabled="job._id != null" required ng-model="job.repeatInterval" class="col-xs-4" name="repeat_interval" type="number" id="job_repeat_interval" min="0">
             <label for="job_repeat_interval" class="col-xs-3 number-unit" ng-bind="(job.repeatInterval == 1) ? 'Minute' : 'Minutes'"></label>
           </div>
         </div>
         <!-- message content -->
         <div class="form-group">
           <label for="job_message" class="col-xs-3">Message Body</label>
-          <textarea ng-model="job.msg" name="msg" class="col-xs-4" id="job_message"></textarea>
+          <textarea ng-disabled="job._id != null" ng-model="job.msg" name="msg" class="col-xs-4" id="job_message"></textarea>
         </div>
 
-        <div class="form-bottom">
-          <input class="btn" type="submit" value="Create Job">
+        <div ng-hide="job._id != null" class="form-bottom">
+          <input class="btn" type="submit" value="Create Advertisement">
+        </div>
+      </div>
+
+      <!--Record-->
+      <div ng-show="job._id != null" class="chart">
+        <div class="normal-content">
+          <table>
+            <thead>
+              <tr>
+                <!--  <th>Job ID</th> -->
+                <th>People count</th>
+                <th>Sent Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="adRecord in adRecords | orderBy: '-createdAt'">
+                <td>{{ adRecord.people_count }}</td>
+                <td><span local-time current="adRecord.createdAt"></span></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

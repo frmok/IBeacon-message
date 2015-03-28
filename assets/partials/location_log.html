@@ -35,7 +35,7 @@
                     <tr ng-repeat="transition in transitions | fromDate:fromDate | toDate:toDate | orderBy: '-timestamp'">
                         <td>{{transition.identifier}}</td>
                         <td>{{transition.action}}</td>
-                        <td><span local-time current="transition.timestamp"></span></span></td>
+                        <td><span local-time current="transition.timestamp"></span></td>
                     </tr>
                 </tbody>
             </table>
