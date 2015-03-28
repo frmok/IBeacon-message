@@ -27,7 +27,8 @@ module.exports = {
   beforeCreate: function(transition, cb) {
     Transition
       .update({
-        identifier: transition.identifier
+        identifier: transition.identifier,
+        next_location: null
       }, {
         next_location: transition.location_id
       })

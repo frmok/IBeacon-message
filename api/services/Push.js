@@ -34,5 +34,5 @@ module.exports = {
     var apnConnection = new apn.Connection(options);
     apnConnection.pushNotification(notification, tokens);
   }
-  
+
 }

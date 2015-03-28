@@ -8,15 +8,16 @@
             <th>Name</th>
             <th>Start Date</th>
             <th>End Date</th>
+            <th>Location</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           <tr ng-repeat="job in jobs">
             <td>{{job.name}}</td>
-            <td>{{job.data.startDate}}</td>
-            <td>{{job.data.endDate}}</td>
-
+            <td>{{job.data.startDate | timestampToTime}}</td>
+            <td>{{job.data.endDate | timestampToTime}}</td>
+            <td>{{job.location}}</td>
             <td>
             	<button ng-click="deleteJob($index)" class="btn btn-warning">Delete</button>
             </td>

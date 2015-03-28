@@ -68,7 +68,7 @@ module.exports = {
     Transition
       .find({
         location_id: location_id,
-        next_location: 0
+        next_location: null
       })
       .exec(function(err, transitions) {
         if (err) {
@@ -96,7 +96,7 @@ module.exports = {
       .find({
         location_id: location_id,
         next_location: {
-          '>': 0
+          '!': null
         }
       })
       .populate('location_id')
@@ -206,7 +206,7 @@ module.exports = {
     Transition
       .find({
         location_id: location_id,
-        next_location: 0
+        next_location: null
       })
       .exec(function(err, transitions) {
         if (err) {

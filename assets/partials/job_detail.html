@@ -14,57 +14,69 @@
         <input required ng-model="job.name" class="col-xs-4" name="name" type="text" id="job_name">
       </div>
       <div class="form-group">
+        <label for="job_type" class="col-xs-3">Location</label>
+        <select id="location_id" ng-model="job.location_id" ng-options="location.id as location.name for location in locations">
+        </select>
+      </div>
+      <div class="form-group">
         <label for="job_type" class="col-xs-3">Job Type</label>
         <select id="job_type" ng-model="job.type">
           <option value="0">One-off</option>
           <option value="1">Repetitive</option>
         </select>
       </div>
-    </div>
+      <!--ONE - OFF-->
+      <div ng-show="job.type == 0">
+        <div class="form-group job">
+          <label for="job_start_date" class="col-xs-3">Trigger Date</label>
+          <div class="dropdown">
+            <a class="dropdown-toggle" id="dropdown" role="button" data-toggle="dropdown">
+              <input type="text" class="form-control" data-ng-model="startDate" placeholder="Start Date">
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+              <datetimepicker data-ng-model="data.dateDropDownInput" data-on-set-time="onTimeSet(newDate, oldDate)" data-datetimepicker-config="{ dropdownSelector: '#dropdown' }"/>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!--Repetitive-->
+      <div ng-show="job.type == 1">
+        <div class="form-group job">
+          <label for="job_start_date" class="col-xs-3">Start Date</label>
+          <div class="dropdown">
+            <a class="dropdown-toggle" id="dropdown" role="button" data-toggle="dropdown">
+              <input type="text" class="form-control" data-ng-model="startDate" placeholder="Start Date">
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+              <datetimepicker data-ng-model="data.dateDropDownInput" data-on-set-time="onTimeSet(newDate, oldDate)" data-datetimepicker-config="{ dropdownSelector: '#dropdown' }"/>
+            </ul>
+          </div>
+        </div>
+        <div class="form-group job">
+          <label for="job_end_date" class="col-xs-3">End Date</label>
+          <div class="dropdown">
+            <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown">
+              <input type="text" class="form-control" data-ng-model="endDate" placeholder="End Date">
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+              <datetimepicker data-ng-model="data.dateDropDownInput" data-on-set-time="onTimeSet2(newDate, oldDate)" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"/>
+            </ul>
+          </div></div>
+          <div class="form-group">
+            <label for="job_repeat_interval" class="col-xs-3">Repeat Interval</label>
+            <input required ng-model="job.repeatInterval" class="col-xs-4" name="repeat_interval" type="number" id="job_repeat_interval" min="0">
+            <label for="job_repeat_interval" class="col-xs-3 number-unit" ng-bind="(job.repeatInterval == 1) ? 'Minute' : 'Minutes'"></label>
+          </div>
+        </div>
+        <!-- message content -->
+        <div class="form-group">
+          <label for="job_message" class="col-xs-3">Message Body</label>
+          <textarea ng-model="job.msg" name="msg" class="col-xs-4" id="job_message"></textarea>
+        </div>
 
-    <!-- display form base on job type -->
-    <div ng-show="job.type == 0" class="form-layout">
-      <div class="form-title">
-        One-off
-      </div>
-
-      <div class="form-group">
-        <label for="job_start_date" class="col-xs-3">Trigger Date</label>
-        <input required ng-model="job.startDate" class="col-xs-4" name="start_date" type="text" id="job_start_date">
-      </div>
-    </div>
-    <div ng-show="job.type == 1" class="form-layout">
-      <div class="form-title">
-        Repetitive
-      </div>
-
-      <div class="form-group">
-        <label for="job_start_date" class="col-xs-3">Start Date</label>
-        <input required ng-model="job.startDate" class="col-xs-4" name="start_date" type="text" id="job_start_date">
-      </div>
-      <div class="form-group">
-        <label for="job_end_date" class="col-xs-3">End Date</label>
-        <input required ng-model="job.endDate" class="col-xs-4" name="end_date" type="text" id="job_end_date">
-      </div>
-      <div class="form-group">
-        <label for="job_repeat_interval" class="col-xs-3">Repeat Interval</label>
-        <input required ng-model="job.repeatInterval" class="col-xs-4" name="repeat_interval" type="number" id="job_repeat_interval" min="0">
-        <label for="job_repeat_interval" class="col-xs-3 number-unit" ng-bind="(job.repeatInterval == 1) ? 'Minute' : 'Minutes'"></label>
-      </div>
-    </div>
-
-    <!-- message content -->
-    <div class="form-layout">
-      <div class="form-title">
-        Message Content
-      </div>
-      <div class="form-group">
-        <label for="job_message" class="col-xs-3">Message Body</label>
-        <textarea ng-model="job.message" name="message" class="col-xs-4" id="job_message"></textarea>
-      </div>
-
-      <div class="form-bottom">
-        <input class="btn" type="submit" value="Create Job">
+        <div class="form-bottom">
+          <input class="btn" type="submit" value="Create Job">
+        </div>
       </div>
     </div>
   </form>

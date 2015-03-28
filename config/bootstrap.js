@@ -33,7 +33,10 @@ module.exports.bootstrap = function(cb) {
       $set: {
         lockedAt: null
       }
-    }, {w:1, multi: true},function(err, result) {
+    }, {
+      w: 1,
+      multi: true
+    }, function(err, result) {
       console.log(result);
       _continueBoostrap();
     });
@@ -45,26 +48,37 @@ module.exports.bootstrap = function(cb) {
       //console.log(jobs);
       for (i = 0; i < jobs.length; i++) {
         agenda.define(jobs[i].attrs.name, function(job, done) {
-          // var currentDate = new Date().getTime();
-          // var startDate = job.attrs.data.startDate;
-          // var endDate = job.attrs.data.endDate;
-          // console.log(currentDate);
-          // console.log(startDate);
-          // console.log(endDate);
-          // console.log(currentDate >= startDate && currentDate <= endDate);
-          // if (currentDate >= startDate && currentDate <= endDate) {
-          console.log(new Date() + ' ' + job.attrs.data.msg);
-          //Push.sendQuestion(4, ['bbe8a5c7d5418a6a25110dc7b159075d0f3c4ba3a13040317e9defa740231ce4']);
-          //job.attrs.data.lastRun = job.attrs.lastRunAt.getTime();
-          job.schedule(new Date(new Date().getTime() + 5000));
+          var currentDate = new Date().getTime();
+          var msg = job.attrs.data.msg;
+          var startDate = job.attrs.data.startDate;
+          var endDate = job.attrs.data.endDate;
+          var repeatInterval = job.attrs.data.repeatInterval;
+          var location_id = job.attrs.data.location_id;
+          if (currentDate >= startDate && currentDate <= endDate || currentDate >= startDate && startDate == endDate) {
+            console.log(new Date() + ' ' + msg);
+            Transition
+              .find({
+                location_id: location_id,
+                next_location: null
+              })
+              .exec(function(err, transitions) {
+                var identifiers = [];
+                for (i = 0; i < transitions.length; i++) {
+                  identifiers.push(transitions[i].identifier);
+                }
+                Push.sendQuestion('4', identifiers);
+              });
+          }
+          if (currentDate < endDate) {
+            job.schedule(new Date(new Date().getTime() + repeatInterval * 60 * 1000));
+          }
           job.save(function(err) {
             done();
           });
-          // }
         });
       }
       agenda.start();
+      cb();
     });
-    cb();
   }
 };

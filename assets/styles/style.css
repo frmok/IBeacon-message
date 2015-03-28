@@ -815,6 +815,24 @@ Modal
     display: inline-block;
 }
 
+.job > .dropdown{
+    width: 33.33333333%;
+}
+
+.job > .dropdown input{
+    position: relative;
+    border-radius: 0;
+    height: 3.5em;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+}
+
+.job .dropdown-menu{
+    position: relative;
+    padding: 6px 0;
+}
+
 /***
 AngularJS nvd3 chart styles
 ***/

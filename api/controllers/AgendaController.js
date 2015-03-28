@@ -16,37 +16,71 @@ module.exports = {
 
   index: function(req, res) {
     agenda.jobs({}, function(err, jobs) {
-      res.send(jobs);
+      for (i in jobs) {
+        (function(jobs, i) {
+          Location
+            .find({
+              id: jobs[i].attrs.data.location_id
+            }).exec(function(err, location) {
+              jobs[i].attrs.location = location[0].name;
+              if (i == jobs.length - 1) {
+                (function(jobs) {
+                  res.send(jobs);
+                })(jobs);
+              }
+            });
+        })(jobs, i)
+      }
     });
   },
 
   create: function(req, res) {
     var jobName = req.param('name');
     var msg = req.param('msg');
+    var startDate = req.param('startDate');
+    var endDate = req.param('endDate');
+    var repeatInterval = req.param('repeatInterval');
+    var location_id = req.param('location_id');
     agenda.define(jobName, function(job, done) {
-      // var currentDate = new Date().getTime();
-      // var startDate = job.attrs.data.startDate;
-      // var endDate = job.attrs.data.endDate;
-      // console.log(currentDate);
-      // console.log(startDate);
-      // console.log(endDate);
-      // console.log(currentDate >= startDate && currentDate <= endDate);
-      // if (currentDate >= startDate && currentDate <= endDate) {
-      console.log(new Date() + ' ' + msg);
-      //Push.sendQuestion(4, ['bbe8a5c7d5418a6a25110dc7b159075d0f3c4ba3a13040317e9defa740231ce4']);
-      //job.attrs.data.lastRun = job.attrs.lastRunAt.getTime();
-      job.schedule(new Date(new Date().getTime() + 5000));
+      var currentDate = new Date().getTime();
+      var msg = job.attrs.data.msg;
+      var startDate = job.attrs.data.startDate;
+      var endDate = job.attrs.data.endDate;
+      var repeatInterval = job.attrs.data.repeatInterval;
+      var location_id = job.attrs.data.location_id;
+      if (currentDate >= startDate && currentDate <= endDate || currentDate >= startDate && startDate == endDate) {
+        console.log(new Date() + ' ' + msg);
+        Transition
+          .find({
+            location_id: location_id,
+            next_location: null
+          })
+          .exec(function(err, transitions) {
+            var identifiers = [];
+            for (i = 0; i < transitions.length; i++) {
+              identifiers.push(transitions[i].identifier);
+            }
+            Push.sendQuestion('4', identifiers);
+          });
+      }
+      if (currentDate < endDate) {
+        job.schedule(new Date(new Date().getTime() + repeatInterval * 60 * 1000));
+      }
       job.save(function(err) {
         done();
       });
-      // }
     });
-    agenda.schedule(new Date(new Date().getTime() + 15000), jobName, {
-      msg: msg
+    agenda.schedule(new Date(startDate), jobName, {
+      msg: msg,
+      startDate: startDate,
+      endDate: endDate,
+      repeatInterval: repeatInterval,
+      location_id: location_id,
     });
     res.json({
       message: "Message created"
     });
+    agenda.start();
   },
 
   delete: function(req, res) {
