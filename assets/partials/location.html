@@ -13,7 +13,7 @@
           <tr ng-repeat="location in locations">
             <td>{{location.name}}</td>
             <td>{{location.transitions.length}}</td>
-            <td><a href="#/location/edit/{{location.id}}"><button ng-click="addBeacon()" class="btn">Modify</button></a> <button ng-click="deleteLocation($index)" class="btn btn-warning">Delete</button></span></td>
+            <td><a href="#/location/edit/{{location.id}}"><button ng-click="addBeacon()" class="btn">Modify</button></a> <button ng-click="deleteLocation($index)" class="btn btn-warning">Delete</button></td>
           </tr>
         </tbody>
       </table>

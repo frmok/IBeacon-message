@@ -1,0 +1,30 @@
+<div class="col-md-12 main-view">
+  <div class="chart">
+    <div class="normal-content">
+      <table>
+        <thead>
+          <tr>
+            <!--  <th>Job ID</th> -->
+            <th>Name</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Location</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="job in jobs">
+            <td>{{job.name}}</td>
+            <td>{{job.data.startDate | timestampToTime}}</td>
+            <td>{{job.data.endDate | timestampToTime}}</td>
+            <td>{{job.location}}</td>
+            <td>
+              <a href="#/location/job/detail/{{job._id}}"><button class="btn">View</button></a>
+            	<button ng-click="deleteJob($index)" class="btn btn-warning">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

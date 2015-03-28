@@ -18,7 +18,7 @@ module.exports = {
       .find()
       .populate('transitions', {
         where: {
-          next_location: 0
+          next_location: null
         }
       })
       .exec(function(err, locations) {
@@ -57,7 +57,7 @@ module.exports = {
           Transition
             .count({
               location_id: location[0].id,
-              next_location: 0
+              next_location: null
             })
             .exec(function(err, count) {
               location[0].people = count;

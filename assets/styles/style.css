@@ -361,7 +361,8 @@ nav.sidebar ul > li > a:hover{
     border: 0;
 }
 
-.form-layout input[type=text]{
+.form-layout input[type=text],
+.form-layout input[type=number]{
     position: absolute;
     height: 3.5em;
     top: 0;
@@ -371,12 +372,26 @@ nav.sidebar ul > li > a:hover{
     border: 1px solid #ccc;
 }
 
+.form-layout input[disabled],
+.form-layout select[disabled],
+.form-layout textarea[disabled]{
+    cursor: not-allowed;
+    background-color: #EEE;
+    opacity: 1;
+    color: #000;
+}
+
 .form-layout input[type=file]{
     position: absolute;
     cursor: pointer;
     top: 0;
     opacity: 0;
     height: 3.5rem;
+}
+
+.form-layout .number-unit {
+	margin-left: 33.33333333%;
+	text-align: left;
 }
 
 .form-layout .upload-btn{
@@ -807,6 +822,24 @@ Modal
     width: 49%;
     margin-right: 10px;
     display: inline-block;
+}
+
+.job > .dropdown{
+    width: 33.33333333%;
+}
+
+.job > .dropdown input{
+    position: relative;
+    border-radius: 0;
+    height: 3.5em;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+}
+
+.job .dropdown-menu{
+    position: relative;
+    padding: 6px 0;
 }
 
 /***

@@ -8,51 +8,86 @@
  * For more information on bootstrapping your app, check out:
  * http://sailsjs.org/#/documentation/reference/sails.config/sails.config.bootstrap.html
  */
-
+var MongoClient = require('mongodb').MongoClient;
+var _agendaURL = 'mongodb://localhost:27017/agenda-example';
 var Agenda = require('agenda');
 var agenda = new Agenda({
   db: {
-    address: 'localhost:27017'
+    address: 'localhost:27017/agenda-example'
   }
 });
-agenda.on('fail:delete old users', function(err, job) {
-  console.log("Job failed with error: %s", err.message);
-});
-module.exports.bootstrap = function(cb) {
 
-  // It's very important to trigger this callback method when you are finished
-  // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  agenda.jobs({}, function(err, jobs) {
-    // Check the job list
-    console.log(jobs);
-    for (i = 0; i < jobs.length; i++) {
-      agenda.define(jobs[i].attrs.name, function(job, done) {
-        // var currentDate = new Date().getTime();
-        // var startDate = job.attrs.data.startDate;
-        // var endDate = job.attrs.data.endDate;
-        // console.log(currentDate);
-        // console.log(startDate);
-        // console.log(endDate);
-        // console.log(currentDate >= startDate && currentDate <= endDate);
-        // if (currentDate >= startDate && currentDate <= endDate) {
-        console.log(new Date() + ' async task');
-        //Push.sendQuestion(4, ['bbe8a5c7d5418a6a25110dc7b159075d0f3c4ba3a13040317e9defa740231ce4']);
-        //job.attrs.data.lastRun = job.attrs.lastRunAt.getTime();
-        job.schedule(new Date(new Date().getTime() + 5000));
-        console.log(job.attrs.data);
-        if (job.attrs.data === null) {
-          job.attrs.data = {};
-          job.attrs.data.count = 1;
-        } else {
-          job.attrs.data.count++;
-        }
-        job.save(function(err) {
-          done();
-        });
-        // }
-      });
-    }
-    agenda.start();
+function graceful() {
+  agenda.stop(function() {
+    console.log("The server shuts down gracefully.");
+    process.exit(0);
   });
-  cb();
+}
+
+process.on('SIGTERM', graceful);
+process.on('SIGINT', graceful);
+module.exports.bootstrap = function(cb) {
+  MongoClient.connect(_agendaURL, function(err, db) {
+    var collection = db.collection('agendaJobs');
+    collection.update({}, {
+      $set: {
+        lockedAt: null
+      }
+    }, {
+      w: 1,
+      multi: true
+    }, function(err, result) {
+      _continueBoostrap();
+    });
+  });
+
+  function _continueBoostrap() {
+    agenda.jobs({}, function(err, jobs) {
+      // Check the job list
+      //console.log(jobs);
+      for (i = 0; i < jobs.length; i++) {
+        agenda.define(jobs[i].attrs.name, function(job, done) {
+          var currentDate = new Date().getTime();
+          var msg = job.attrs.data.msg;
+          var startDate = job.attrs.data.startDate;
+          var endDate = job.attrs.data.endDate;
+          var repeatInterval = job.attrs.data.repeatInterval;
+          var location_id = job.attrs.data.location_id;
+          if (currentDate >= startDate && currentDate <= endDate || currentDate >= startDate && startDate == endDate) {
+            console.log(new Date() + ' ' + msg);
+            Transition
+              .find({
+                location_id: location_id,
+                next_location: null
+              })
+              .exec(function(err, transitions) {
+                var identifiers = [];
+                for (i = 0; i < transitions.length; i++) {
+                  identifiers.push(transitions[i].identifier);
+                }
+                Push.sendMessage(msg, identifiers);
+                Record
+                  .create({
+                    people_count: identifiers.length,
+                    agenda_id: job.attrs._id.toString()
+                  })
+                  .exec(function(err, record) {
+                    if (err) {
+                      console.log(err);
+                    }
+                  });
+              });
+          }
+          if (currentDate < endDate) {
+            job.schedule(new Date(new Date().getTime() + repeatInterval * 60 * 1000));
+          }
+          job.save(function(err) {
+            done();
+          });
+        });
+      }
+      agenda.start();
+      cb();
+    });
+  }
 };

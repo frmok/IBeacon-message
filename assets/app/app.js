@@ -102,7 +102,6 @@ var app = angular.module('backendApp', [
                 });
             }
             $scope.updateLocation = function() {
-              console.log($scope.location);
               if ($scope.location.id) {
                 Location
                   .update($scope.location)
@@ -126,6 +125,108 @@ var app = angular.module('backendApp', [
           }
         ]
       });
+
+
+
+      $stateProvider.state("backend_job_list", {
+        resolve: {
+          jobs: ['Job', '$stateParams', function(Job, $stateParams) {
+            return Job.index();
+          }]
+        },
+        templateUrl: "/partials/job_list.html",
+        url: "/location/job/",
+        controller: ['$rootScope', '$scope', '$stateParams', 'Job', 'jobs', '$filter',
+          function($rootScope, $scope, $stateParams, Job, jobs, $filter) {
+            $rootScope.currentAction = 'Job List';
+            $scope.jobs = jobs.data;
+            $scope.deleteJob = function(index) {
+              Job.delete({
+                  id: $scope.jobs[index]._id
+                })
+                .then(function(res) {
+                  console.log(res);
+                  $scope.jobs.splice(index, 1);
+                  console.log("remaining jobs list", $scope.jobs);
+                  // $rootScope.updateLocationList();
+                })
+                .catch(function(res) {
+                  console.log(res);
+                  $scope.jobs.splice(index, 1);
+                  console.log("remaining jobs list", $scope.jobs);
+                });
+            }
+          }
+        ]
+      });
+      $stateProvider.state("backend_job_detail", {
+        resolve: {},
+        templateUrl: "/partials/job_detail.html",
+        url: "/location/job/detail/{id}",
+        resolve: {
+          locations: ['Location', '$stateParams', function(Location, $stateParams) {
+            return Location.all();
+          }],
+          job: ['Job', '$stateParams', function(Job, $stateParams) {
+            if ($stateParams.id) {
+              return Job.get($stateParams.id);
+            }
+            return;
+          }],
+          adRecords: ['AdRecord', '$stateParams', function(AdRecord, $stateParams) {
+            if ($stateParams.id) {
+              return AdRecord.byAdvertisement($stateParams.id);
+            }
+            return;
+          }],
+        },
+        controller: ['$rootScope', '$scope', '$stateParams', 'Job', '$filter', 'locations', 'job', 'adRecords',
+          function($rootScope, $scope, $stateParams, Job, $filter, locations, job, adRecords) {
+            $rootScope.currentAction = 'Create new advertisement';
+            $scope.crud_action = 'Create new advertisement';
+            $scope.locations = locations.data;
+            $scope.onTimeSet = function(newDate, oldDate) {
+              $scope.startDate = $filter('date')(newDate, 'yyyy-MM-dd HH:mm:ss');
+              $scope.endDate = $filter('date')(newDate, 'yyyy-MM-dd HH:mm:ss');
+              $scope.job.startDate = new Date(newDate).getTime();
+              $scope.job.endDate = new Date(newDate).getTime();
+            }
+            $scope.onTimeSet2 = function(newDate, oldDate) {
+              $scope.endDate = $filter('date')(newDate, 'yyyy-MM-dd HH:mm:ss');
+              $scope.job.endDate = new Date(newDate).getTime();
+            }
+            $scope.addJob = function() {
+              Job.create($scope.job)
+                .then(function(res) {
+                  $scope.msg = "Successfully created";
+                  $scope.job = {};
+                  $scope.job.location_id = $scope.locations[0].id;
+                  $scope.job.type = 1;
+                  $scope.job.repeatInterval = 1;
+                  $scope.startDate = $scope.endDate = "";
+                });
+            };
+            if ($stateParams.id) {
+              $scope.adRecords = adRecords.data;
+              $rootScope.currentAction = 'Advertisement';
+              $scope.crud_action = 'Advertisement';
+              $scope.job = job.data;
+              $scope.job.type = 1;
+              $scope.job.location_id = job.data.data.location_id;
+              $scope.startDate = moment.unix(job.data.data.startDate / 1000).format('YYYY-MM-DD HH:mm:ss');
+              $scope.endDate = moment.unix(job.data.data.endDate / 1000).format('YYYY-MM-DD HH:mm:ss');
+              $scope.job.repeatInterval = job.data.data.repeatInterval;
+              $scope.job.msg = job.data.data.msg;
+            } else {
+              $scope.job = {};
+              $scope.job.location_id = $scope.locations[0].id;
+              $scope.job.type = 1;
+              $scope.job.repeatInterval = 1;
+            }
+          }
+        ]
+      });
+
       $stateProvider.state("backend_location_log", {
         resolve: {
           transitions: ['Transition', '$stateParams', function(Transition, $stateParams) {
@@ -271,6 +372,35 @@ app.factory('Beacon', ['$http', function($http) {
   return factory;
 }]);
 
+app.factory('Job', ['$http', function($http) {
+  var factory = {};
+  factory.index = function() {
+    return $http.get('/agenda/index');
+  };
+  factory.get = function(id) {
+    return $http.get('/agenda/detail/' + id);
+  };
+  factory.create = function(job) {
+    return $http.post('/agenda/create/', job);
+  };
+  factory.delete = function(id) {
+    console.log(id);
+    return $http.post('/agenda/delete/', id);
+  };
+  return factory;
+}]);
+
+app.factory('AdRecord', ['$http', function($http) {
+  var factory = {};
+  factory.byAdvertisement = function(id) {
+    return $http.get('/record/byAdvertisement/' + id);
+  };
+  factory.create = function(job) {
+    return $http.post('/record/create/', job);
+  };
+  return factory;
+}]);
+
 app.filter('capitalizeFirst',
   function() {
     return function(input, scope) {
@@ -285,7 +415,7 @@ app.filter('fromDate',
       var filtered = [];
       angular.forEach(transitions, function(transition) {
         if (fromDate !== undefined && fromDate != "") {
-          if (moment(transition.timestamp).isAfter(moment(fromDate))) {
+          if (moment(transition.timestamp).add('8', 'hours').isAfter(moment(fromDate))) {
             filtered.push(transition);
           }
         } else {
@@ -302,7 +432,7 @@ app.filter('toDate',
       var filtered = [];
       angular.forEach(transitions, function(transition) {
         if (toDate !== undefined && toDate != "") {
-          if (moment(transition.timestamp).isBefore(moment(toDate))) {
+          if (moment(transition.timestamp).add('8', 'hours').isBefore(moment(toDate))) {
             filtered.push(transition);
           }
         } else {
@@ -312,6 +442,24 @@ app.filter('toDate',
       return filtered;
     };
   });
+app.filter('timestampToTime',
+  function() {
+    return function(input, scope) {
+      var time = moment.unix(input / 1000).format("YYYY-MM-DD HH:mm:ss");
+      return time;
+    }
+  }
+);
+app.directive('localTime', ['$interval', 'dateFilter', function($interval, dateFilter) {
+  return {
+    scope: {
+      current: '=current',
+    },
+    link: function(scope, element, attrs) {
+      element.text(moment(scope.current, 'YYYY-MM-DD HH:mm:ss').add('8', 'hours').format('YYYY-MM-DD HH:mm:ss'));
+    }
+  }
+}]);
 app.directive('relativeTime', ['$interval', 'dateFilter', function($interval, dateFilter) {
   return {
     scope: {
@@ -319,7 +467,7 @@ app.directive('relativeTime', ['$interval', 'dateFilter', function($interval, da
     },
     link: function(scope, element, attrs) {
       function updateTime() {
-        element.text(moment(scope.current, 'YYYY-MM-DD HH:mm:ss').fromNow());
+        element.text(moment(scope.current, 'YYYY-MM-DD HH:mm:ss').add('8', 'hours').fromNow());
       }
       timeoutId = $interval(function() {
         updateTime();
