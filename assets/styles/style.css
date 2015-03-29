@@ -724,16 +724,19 @@ nav.sidebar ul > li > a:hover{
 
 .color-red, .color-red > a{
     color: #E87878;
-    cursor: pointer;
 }
 
 .color-green, .color-green > a{
     color: #5B9B36;
-    cursor: pointer;
 }
 
 .color-gray, .color-gray > a{
     color: #666;
+}
+
+.color-red > a,
+.color-green > a,
+.color-gray > a{
     cursor: pointer;
 }
 

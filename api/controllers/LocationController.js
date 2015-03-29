@@ -95,7 +95,19 @@ module.exports = {
             error: "FATAL ERROR"
           });
         } else {
-          res.send(beacon[0].location_id);
+          if (beacon.length === 0) {
+            res.send(200, {
+              debug: "NO LOCATION FOUND"
+            });
+          } else {
+            if (beacon[0].location_id === undefined) {
+              res.send(200, {
+                debug: "NO LOCATION FOUND"
+              });
+            } else {
+              res.send(beacon[0].location_id);
+            }
+          }
         }
       });
   },

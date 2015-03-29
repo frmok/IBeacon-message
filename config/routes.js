@@ -37,6 +37,8 @@ module.exports.routes = {
     'GET /transition/atLocation/:id': 'TransitionController.atLocation',
     'GET /transition/log/:id': 'TransitionController.log',
     'GET /record/byAdvertisement/:id': 'RecordController.byAdvertisement',
+    'GET /transition/duration/:id': 'TransitionController.duration',
+    'GET /transition/statPeopleCount/:id': 'TransitionController.statPeopleCount',
   },
 
   /***************************************************************************

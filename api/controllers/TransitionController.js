@@ -5,6 +5,7 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+var mongodb = require('mongodb');
 module.exports = {
 
   /**
@@ -199,6 +200,67 @@ module.exports = {
           });
         }
       });
+  },
+
+  duration: function(req, res) {
+    var location_id = req.param("id");
+    Transition
+      .find({
+        location_id: location_id,
+        next_location: {
+          "!": null,
+        }
+      })
+      .exec(function(err, transitions) {
+        var timeDiff = 0;
+        var avgTimeDiff = 0;
+        transitions.map(function(transition) {
+          timeDiff += transition.updatedAt.getTime() - transition.createdAt.getTime();
+        });
+        avgTimeDiff = timeDiff / transitions.length;
+        res.json({
+          'duration': parseInt(avgTimeDiff / 1000, 10)
+        });
+      })
+  },
+
+  statPeopleCount: function(req, res) {
+    var location_id = req.param("id");
+    Transition.native(function(err, collection) {
+      collection.aggregate([{
+        $match: {
+          "location_id": mongodb.ObjectId(location_id),
+        }
+      }, {
+        $sort: {
+          "createdAt": -1,
+        }
+      }, {
+        $group: {
+          _id: {
+            month: {
+              $month: "$createdAt"
+            },
+            day: {
+              $dayOfMonth: "$createdAt"
+            },
+            year: {
+              $year: "$createdAt"
+            }
+          },
+          "count": {
+            "$sum": 1
+          }
+        }
+      }], function(err, result) {
+        var stat = { values: [] };
+        result.map(function(row){
+          var data = [row._id.year+'-'+row._id.month+'-'+row._id.day, row.count];
+          stat.values.push(data);
+        });
+        res.send(stat);
+      });
+    });
   },
 
   /**

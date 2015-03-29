@@ -264,15 +264,22 @@ var app = angular.module('backendApp', [
               return Transition.atLocation($stateParams.id);
             }
             return;
-          }]
+          }],
+          duration: ['Transition', '$stateParams', function(Transition, $stateParams) {
+            if ($stateParams.id) {
+              return Transition.duration($stateParams.id);
+            }
+            return;
+          }],
         },
         templateUrl: "/partials/location_monitor.html",
         url: "/location/{id}",
-        controller: ['$rootScope', '$scope', '$stateParams', 'Location', 'location', 'transitions', 'Transition',
-          function($rootScope, $scope, $stateParams, Location, location, transitions, Transition) {
+        controller: ['$rootScope', '$scope', '$stateParams', 'Location', 'location', 'transitions', 'Transition', 'duration',
+          function($rootScope, $scope, $stateParams, Location, location, transitions, Transition, duration) {
             $scope.modal = {
               open: false
             };
+            console.log(duration.data.duration);
             $scope.location = location.data;
             $scope.transitions = transitions.data || [];
             $scope.crud_action = $rootScope.currentAction = "Location Monitoring";
@@ -355,6 +362,9 @@ app.factory('Transition', ['$http', function($http) {
   factory.sendQuestion = function(data) {
     return $http.post('/transition/sendQuestion/', data);
   };
+  factory.duration = function(id) {
+    return $http.get('/transition/duration/' + id);
+  }
   return factory;
 }]);
 
