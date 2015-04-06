@@ -15,25 +15,14 @@ module.exports = {
    * @param {Integer} pollID - The ID of KEEP Poll question
    * @param {Array} tokens - An array of iOS device tokens
    */
-  sendQuestion: function(pollID, tokens) {
+  sendMessage: function(msgOptions, tokens) {
     var note = new apn.Notification();
     note.sound = "ping.aiff";
-    note.keepPoll = pollID;
-    note.alert = "\uD83D\uDCE7 \u2709 You have a new message";
-    this.iOSPush(note, tokens);
-  },
-
-  /**
-   * This method returns the data of a location
-   *
-   * @method getByBeacon
-   * @param {String} message - The message content
-   * @param {Array} tokens - An array of iOS device tokens
-   */
-  sendMessage: function(message, tokens) {
-    var note = new apn.Notification();
-    note.sound = "ping.aiff";
-    note.alert = message;
+    note.payload = {
+      'msgType': msgOptions.msgType,
+      'msgContent': msgOptions.msgContent,
+    };
+    note.alert = msgOptions.msgText;
     this.iOSPush(note, tokens);
   },
 

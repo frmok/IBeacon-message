@@ -14,6 +14,15 @@ module.exports = {
     disabled: {
       type: 'integer'
     },
+    msgType: {
+      type: 'integer'
+    },
+    msgContent: {
+      type: 'string'
+    },
+    msgText: {
+      type: 'string'
+    },
     beacons: {
       collection: 'beacon',
       via: 'location_id'

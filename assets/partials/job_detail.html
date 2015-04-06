@@ -68,10 +68,24 @@
             <label for="job_repeat_interval" class="col-xs-3 number-unit" ng-bind="(job.repeatInterval == 1) ? 'Minute' : 'Minutes'"></label>
           </div>
         </div>
+        <div class="form-group">
+        <label for="job_msgType" class="col-xs-3">Message Type</label>
+          <select ng-disabled="job._id != null" id="job_msgType" ng-model="job.msgType">
+            <option value="1">Text</option>
+            <option value="2">Image</option>
+            <option value="3">Video</option>
+            <option value="4">Link</option>
+            <option value="5">Keep Poll</option>
+          </select>
+        </div>
+        <div ng-show="job.msgType > 1" class="form-group">
+          <label for="job_msgContent" class="col-xs-3">Message Content</label>
+          <input ng-disabled="job._id != null" ng-model="job.msgContent" class="col-xs-4" name="name" type="text" id="job_msgContent">
+        </div>
         <!-- message content -->
         <div class="form-group">
-          <label for="job_message" class="col-xs-3">Message Body</label>
-          <textarea ng-disabled="job._id != null" ng-model="job.msg" name="msg" class="col-xs-4" id="job_message"></textarea>
+          <label for="job_message" class="col-xs-3">Message Text</label>
+          <textarea ng-disabled="job._id != null" ng-model="job.msgText" name="msg" class="col-xs-4" id="job_message"></textarea>
         </div>
 
         <div ng-hide="job._id != null" class="form-bottom">

@@ -63,6 +63,7 @@ var app = angular.module('backendApp', [
                 location_id: $scope.location.id
               };
             } else {
+              $scope.location.msgType = 1;
               $scope.location.disabled = 0;
               $scope.crud_action = $rootScope.currentAction = "Add Location";
             }
@@ -125,9 +126,6 @@ var app = angular.module('backendApp', [
           }
         ]
       });
-
-
-
       $stateProvider.state("backend_job_list", {
         resolve: {
           jobs: ['Job', '$stateParams', function(Job, $stateParams) {
@@ -211,14 +209,21 @@ var app = angular.module('backendApp', [
               $rootScope.currentAction = 'Advertisement';
               $scope.crud_action = 'Advertisement';
               $scope.job = job.data;
-              $scope.job.type = 1;
               $scope.job.location_id = job.data.data.location_id;
               $scope.startDate = moment.unix(job.data.data.startDate / 1000).format('YYYY-MM-DD HH:mm:ss');
               $scope.endDate = moment.unix(job.data.data.endDate / 1000).format('YYYY-MM-DD HH:mm:ss');
+              if ($scope.startDate == $scope.endDate) {
+                $scope.job.type = 0;
+              } else {
+                $scope.job.type = 1;
+              }
               $scope.job.repeatInterval = job.data.data.repeatInterval;
-              $scope.job.msg = job.data.data.msg;
+              $scope.job.msgType = job.data.data.msgType;
+              $scope.job.msgContent = job.data.data.msgContent;
+              $scope.job.msgText = job.data.data.msgText;
             } else {
               $scope.job = {};
+              $scope.job.msgType = 1;
               $scope.job.location_id = $scope.locations[0].id;
               $scope.job.type = 1;
               $scope.job.repeatInterval = 1;
@@ -277,7 +282,10 @@ var app = angular.module('backendApp', [
         controller: ['$rootScope', '$scope', '$stateParams', 'Location', 'location', 'transitions', 'Transition', 'duration',
           function($rootScope, $scope, $stateParams, Location, location, transitions, Transition, duration) {
             $scope.modal = {
-              open: false
+              open: false,
+              msgType: 1,
+              msgContent: '',
+              msgText: '',
             };
             console.log(duration.data.duration);
             $scope.location = location.data;
@@ -285,15 +293,28 @@ var app = angular.module('backendApp', [
             $scope.crud_action = $rootScope.currentAction = "Location Monitoring";
             //for sending question
             $scope.sendQuestion = function() {
-                console.log($scope.modal);
+                if ($scope.modal.msgText === "") {
+                  alert('Please fill in the text')
+                  return;
+                }
+                if ($scope.modal.msgType > 1) {
+                  if ($scope.modal.msgContent === "") {
+                    alert('Please fill in the content')
+                    return;
+                  }
+                }
                 Transition
                   .sendQuestion({
                     location_id: $scope.location.id,
-                    pollID: $scope.modal.content
+                    msgContent: $scope.modal.msgContent,
+                    msgType: $scope.modal.msgType,
+                    msgText: $scope.modal.msgText
                   }).then(
                     function(res) {
                       $scope.modal.open = false;
-                      $scope.modal.content = '';
+                      $scope.modal.msgType = 1;
+                      $scope.modal.msgContent = '';
+                      $scope.modal.msgText = '';
                     })
               }
               //subscribe to the transition room

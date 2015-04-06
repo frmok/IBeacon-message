@@ -172,13 +172,22 @@ module.exports = {
    *
    * @method sendQuestion
    * @param {Object} req - The request object
-   * @param {Integer} req.body.pollID - The id of KEEP Poll question
+   * @param {Integer} req.body.msgType - The type of notification
+   * @param {String} req.body.msgText - The text of notification
+   * @param {String} req.body.msgText - The actual content of notification
    * @param {Integer} req.body.location_id - The id of location
    * @param {Object} res - The response object
    */
   sendQuestion: function(req, res) {
-    var pollID = req.param("pollID");
+    var msgText = req.param("msgText");
+    var msgContent = req.param("msgContent");
+    var msgType = req.param("msgType");
     var location_id = req.param("location_id");
+    var msgOptions = {
+      msgType: msgType,
+      msgContent: msgContent,
+      msgText: msgText
+    };
     Transition
       .find({
         location_id: location_id,
@@ -194,9 +203,9 @@ module.exports = {
           for (i = 0; i < transitions.length; i++) {
             identifiers.push(transitions[i].identifier);
           }
-          Push.sendQuestion(pollID, identifiers);
+          Push.sendMessage(msgOptions, identifiers);
           res.json({
-            message: 'Successfully sent'
+            debug: 'SUCCESS'
           });
         }
       });
@@ -253,9 +262,11 @@ module.exports = {
           }
         }
       }], function(err, result) {
-        var stat = { values: [] };
-        result.map(function(row){
-          var data = [row._id.year+'-'+row._id.month+'-'+row._id.day, row.count];
+        var stat = {
+          values: []
+        };
+        result.map(function(row) {
+          var data = [row._id.year + '-' + row._id.month + '-' + row._id.day, row.count];
           stat.values.push(data);
         });
         res.send(stat);

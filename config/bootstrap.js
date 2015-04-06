@@ -48,13 +48,20 @@ module.exports.bootstrap = function(cb) {
       for (i = 0; i < jobs.length; i++) {
         agenda.define(jobs[i].attrs.name, function(job, done) {
           var currentDate = new Date().getTime();
-          var msg = job.attrs.data.msg;
+          var msgText = job.attrs.data.msgText;
+          var msgContent = job.attrs.data.msgContent;
+          var msgType = job.attrs.data.msgType;
           var startDate = job.attrs.data.startDate;
           var endDate = job.attrs.data.endDate;
           var repeatInterval = job.attrs.data.repeatInterval;
           var location_id = job.attrs.data.location_id;
+          var msgOptions = {
+            msgType: msgType,
+            msgContent: msgContent,
+            msgText: msgText
+          };
           if (currentDate >= startDate && currentDate <= endDate || currentDate >= startDate && startDate == endDate) {
-            console.log(new Date() + ' ' + msg);
+            console.log(new Date() + ' ' + msgText);
             Transition
               .find({
                 location_id: location_id,
@@ -65,7 +72,7 @@ module.exports.bootstrap = function(cb) {
                 for (i = 0; i < transitions.length; i++) {
                   identifiers.push(transitions[i].identifier);
                 }
-                Push.sendMessage(msg, identifiers);
+                Push.sendMessage(msgOptions, identifiers);
                 Record
                   .create({
                     people_count: identifiers.length,

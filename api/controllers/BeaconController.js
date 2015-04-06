@@ -42,22 +42,46 @@ module.exports = {
     var major = req.param("major");
     var minor = req.param("minor");
     var location_id = req.param("location_id");
-    Beacon
-      .create({
-        major: major,
-        minor: minor,
-        location_id: location_id
-      })
-      .exec(function(err, beacon) {
-        if (err) {
-          console.log(err);
+
+    //check for duplicated beacon
+    Beacon.find({
+      major: major,
+      minor: minor
+    }).exec(function(err, beacon) {
+      if (err) {
+        console.log(err);
+        res.send(500, {
+          error: "FATAL ERROR"
+        });
+      } else {
+        if (beacon.length > 0) {
           res.send(500, {
-            error: "FATAL ERROR"
+            error: "DUPLICATED BEACONS"
           });
         } else {
-          res.send(beacon);
+          addBeacon();
         }
-      });
+      }
+    });
+
+    function addBeacon() {
+      Beacon
+        .create({
+          major: major,
+          minor: minor,
+          location_id: location_id
+        })
+        .exec(function(err, beacon) {
+          if (err) {
+            console.log(err);
+            res.send(500, {
+              error: "FATAL ERROR"
+            });
+          } else {
+            res.send(beacon);
+          }
+        });
+    }
   },
 
   /**

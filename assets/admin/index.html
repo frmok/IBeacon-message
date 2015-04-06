@@ -28,12 +28,12 @@
     <img src="/bridge.png">
     <ul>
       <li class="cat">Location</li>
-      <li ng-repeat="location in locations"><a href="#/location/{{ location.id }}">{{ location.name }}</a></li>
-      <li><a href="#/location">Location Management</a></li>
-      <li><a href="#/location/edit/">Add Location</a></li>
+      <li ng-repeat="location in locations"><a href="#/location/{{ location.id }}"><span class="fa fa-map-marker"></span> {{ location.name }}</a></li>
+      <li><a href="#/location"><span class="fa fa-cog"></span> Location Management</a></li>
+      <li><a href="#/location/edit/"><span class="fa fa-plus"></span> Add Location</a></li>
       <li class="cat">Advertisement</li>
-      <li><a href="#/location/job/">Advertisement Management</a></li>
-      <li><a href="#/location/job/detail/">Add Advertisement</a></li>
+      <li><a href="#/location/job/"><span class="fa fa-cog"></span> Advertisement Management</a></li>
+      <li><a href="#/location/job/detail/"><span class="fa fa-plus"></span> Add Advertisement</a></li>
     </ul>
   </nav>
   <div class="main">

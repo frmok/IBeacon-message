@@ -5,7 +5,6 @@
  */
 
 module.exports = {
-
   /**
    * This method returns the list of locations
    *
@@ -124,10 +123,16 @@ module.exports = {
   create: function(req, res) {
     var name = req.param("name");
     var disabled = req.param("disabled");
+    var msgType = req.param("msgType");
+    var msgContent = req.param("msgContent");
+    var msgText = req.param("msgText");
     Location
       .create({
         name: name,
-        disabled: disabled
+        disabled: disabled,
+        msgType: msgType,
+        msgContent: msgContent,
+        msgText: msgText
       })
       .exec(function(err, location) {
         if (err) {
@@ -155,12 +160,18 @@ module.exports = {
     var id = req.param("id");
     var name = req.param("name");
     var disabled = req.param("disabled");
+    var msgType = req.param("msgType");
+    var msgContent = req.param("msgContent");
+    var msgText = req.param("msgText");
     Location.
     update({
         id: id
       }, {
         name: name,
-        disabled: disabled
+        disabled: disabled,
+        msgType: msgType,
+        msgContent: msgContent,
+        msgText: msgText
       })
       .exec(function(err, location) {
         if (err) {

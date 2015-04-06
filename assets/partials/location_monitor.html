@@ -18,7 +18,7 @@
         <div class="col-lg-3 color-green">
           <a ng-click="modal.open = true" href"#">
             <div class="fa fa-question-circle icon-block"></div>
-            <div class="text-center">Send Question</div>
+            <div class="text-center">Instant Message</div>
           </a>
         </div>
         <div class="col-lg-3  color-gray">
@@ -48,14 +48,23 @@
     </div>
   </div>
 </div>
-
+<div ng-show="modal.open" class="overlay">
+</div>
 <div ng-show="modal.open" class="custom_modal">
   <div>
     <div class="custom_modal_header">
-      Send a question
+      Send an instant message
     </div>
     <div class="custom_modal_content">
-      <input ng-model="modal.content" type="text" required placeholder="KEEP Poll ID" />
+      <select ng-model="modal.msgType">
+        <option value="1">Text</option>
+        <option value="2">Image</option>
+        <option value="3">Video</option>
+        <option value="4">Link</option>
+        <option value="5">Keep Poll</option>
+      </select>
+      <input ng-show="modal.msgType > 1" ng-model="modal.msgContent" type="text" required placeholder="Notification content" />
+      <input ng-model="modal.msgText" type="text" required placeholder="Notification text" />
     </div>
     <div class="custom_modal_footer">
       <input ng-click="sendQuestion()" type="submit" value="Send">

@@ -18,6 +18,24 @@
           <option value="1">Disabled</option>
         </select>
       </div>
+      <div class="form-group">
+        <label for="location_msgType" class="col-xs-3">Welcome Message Type</label>
+        <select id="location_msgType" ng-model="location.msgType">
+          <option value="1">Text</option>
+          <option value="2">Image</option>
+          <option value="3">Video</option>
+          <option value="4">Link</option>
+          <option value="5">Keep Poll</option>
+        </select>
+      </div>
+      <div ng-show="location.msgType > 1" class="form-group">
+        <label for="location_msgContent" class="col-xs-3">Welcome Message Content</label>
+        <input ng-model="location.msgContent" class="col-xs-4" name="name" type="text" id="location_msgContent">
+      </div>
+      <div class="form-group">
+        <label for="location_msgText" class="col-xs-3">Welcome Message Text</label>
+        <input required ng-model="location.msgText" class="col-xs-4" name="name" type="text" id="location_msgText">
+      </div>
       <div class="form-bottom">
         <input class="btn" type="submit">
       </div>
