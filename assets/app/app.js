@@ -208,6 +208,7 @@ var app = angular.module('backendApp', [
                   $scope.job = {};
                   $scope.job.location_id = $scope.locations[0].id;
                   $scope.job.type = 1;
+                  $scope.job.msgType = 1;
                   $scope.job.repeatInterval = 1;
                   $scope.startDate = $scope.endDate = "";
                 });
@@ -316,7 +317,7 @@ var app = angular.module('backendApp', [
                   .sendQuestion({
                     location_id: $scope.location.id,
                     msgContent: $scope.modal.msgContent,
-                    msgType: $scope.modal.msgType,
+                    msgType: parseInt($scope.modal.msgType),
                     msgText: $scope.modal.msgText
                   }).then(
                     function(res) {
