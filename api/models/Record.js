@@ -11,6 +11,9 @@ module.exports = {
     people_count: {
       type: 'integer'
     },
+    actual_count: {
+      type: 'integer'
+    },
     agenda_id: {
       type: 'string'
     }

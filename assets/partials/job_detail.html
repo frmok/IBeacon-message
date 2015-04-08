@@ -99,14 +99,15 @@
           <table>
             <thead>
               <tr>
-                <!--  <th>Job ID</th> -->
                 <th>People count</th>
+                <th>Seen count</th>
                 <th>Sent Date</th>
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat="adRecord in adRecords | orderBy: '-createdAt'">
                 <td>{{ adRecord.people_count }}</td>
+                <td>{{ adRecord.actual_count }}</td>
                 <td><span local-time current="adRecord.createdAt"></span></td>
               </tr>
             </tbody>

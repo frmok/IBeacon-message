@@ -20,6 +20,9 @@ module.exports = {
           next_location: null
         }
       })
+      .sort({
+        name: 'asc'
+      })
       .exec(function(err, locations) {
         if (err) {
           res.send(500, {
@@ -163,8 +166,8 @@ module.exports = {
     var msgType = req.param("msgType");
     var msgContent = req.param("msgContent");
     var msgText = req.param("msgText");
-    Location.
-    update({
+    Location
+      .update({
         id: id
       }, {
         name: name,

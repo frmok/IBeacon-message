@@ -122,6 +122,8 @@ module.exports = {
   create: function(req, res) {
     var identifier = req.param("identifier");
     var location_id = req.param("location_id");
+    var regexp = new RegExp('<|>| ', 'g');
+    identifier = identifier.replace(regexp, '');
     Transition
       .create({
         identifier: identifier,
@@ -162,9 +164,41 @@ module.exports = {
             error: "FATAL ERROR"
           });
         } else {
-          res.send(transition);
+          res.send(transition[0]);
         }
       });
+  },
+
+  /**
+   * This method marks a transition already left its location
+   *
+   * @method leave
+   * @param {Object} req - The request object
+   * @param {Integer} req.body.id - The id of transition
+   * @param {Object} res - The response object
+   */
+  leave: function(req, res) {
+    var id = req.param("id");
+    Transition.find({
+      id: id
+    }).exec(function(err, transition) {
+      Transition
+        .update({
+          id: id
+        }, {
+          next_location: transition[0].location_id
+        })
+        .exec(function(err, transition) {
+          if (err) {
+            res.send(500, {
+              error: "FATAL ERROR"
+            });
+          } else {
+            res.send(transition[0]);
+          }
+        });
+    });
+
   },
 
   /**
@@ -186,7 +220,8 @@ module.exports = {
     var msgOptions = {
       msgType: msgType,
       msgContent: msgContent,
-      msgText: msgText
+      msgText: msgText,
+      recordId: "",
     };
     Transition
       .find({
@@ -221,15 +256,21 @@ module.exports = {
         }
       })
       .exec(function(err, transitions) {
-        var timeDiff = 0;
-        var avgTimeDiff = 0;
-        transitions.map(function(transition) {
-          timeDiff += transition.updatedAt.getTime() - transition.createdAt.getTime();
-        });
-        avgTimeDiff = timeDiff / transitions.length;
-        res.json({
-          'duration': parseInt(avgTimeDiff / 1000, 10)
-        });
+        if (err) {
+          res.send(500, {
+            error: "FATAL ERROR"
+          });
+        } else {
+          var timeDiff = 0;
+          var avgTimeDiff = 0;
+          transitions.map(function(transition) {
+            timeDiff += transition.updatedAt.getTime() - transition.createdAt.getTime();
+          });
+          avgTimeDiff = timeDiff / transitions.length;
+          res.json({
+            'duration': parseInt(avgTimeDiff / 1000, 10)
+          });
+        }
       })
   },
 

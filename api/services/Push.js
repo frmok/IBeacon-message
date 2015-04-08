@@ -17,10 +17,12 @@ module.exports = {
    */
   sendMessage: function(msgOptions, tokens) {
     var note = new apn.Notification();
+    var record = msgOptions.recordId;
     note.sound = "ping.aiff";
     note.payload = {
       'msgType': msgOptions.msgType,
       'msgContent': msgOptions.msgContent,
+      'recordId': msgOptions.recordId,
     };
     note.alert = msgOptions.msgText;
     this.iOSPush(note, tokens);

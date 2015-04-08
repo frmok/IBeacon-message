@@ -33,7 +33,10 @@ var app = angular.module('backendApp', [
             $rootScope.currentAction = "Location Management";
             $scope.locations = locations.data;
             $scope.deleteLocation = function(index) {
-              Location.delete($scope.locations[index]);
+              Location.delete($scope.locations[index])
+                .then(function(res) {
+                  $rootScope.updateLocationList();
+                });
               $scope.locations.splice(index, 1);
             }
           }
@@ -55,6 +58,7 @@ var app = angular.module('backendApp', [
         controller: ['$rootScope', '$scope', '$stateParams', 'Location', 'location', 'Beacon',
           function($rootScope, $scope, $stateParams, Location, location, Beacon) {
             $scope.location = {};
+            $scope.location.msgContent = '';
             $scope.newBeacon = {};
             if ($stateParams.id) {
               $scope.crud_action = $rootScope.currentAction = "Edit Location";
@@ -63,7 +67,7 @@ var app = angular.module('backendApp', [
                 location_id: $scope.location.id
               };
             } else {
-              $scope.location.msgType = 1;
+              $scope.location.msgType = 0;
               $scope.location.disabled = 0;
               $scope.crud_action = $rootScope.currentAction = "Add Location";
             }
@@ -76,7 +80,9 @@ var app = angular.module('backendApp', [
                     console.log(res);
                     $scope.msg_beacon = "Successfully added";
                     $scope.location.beacons.push(res.data);
-                    $scope.newBeacon = {};
+                    $scope.newBeacon = {
+                      location_id: $scope.location.id
+                    };
                   },
                   function() {
                     $scope.msg_beacon_error = "Error occurs";
@@ -99,7 +105,6 @@ var app = angular.module('backendApp', [
               Beacon.delete($scope.location.beacons[index])
                 .then(function(res) {
                   $scope.location.beacons.splice(index, 1);
-                  $rootScope.updateLocationList();
                 });
             }
             $scope.updateLocation = function() {
@@ -118,6 +123,9 @@ var app = angular.module('backendApp', [
                     function(res) {
                       $scope.msg = "Successfully added";
                       $scope.location = res.data;
+                      $scope.newBeacon = {
+                        location_id: $scope.location.id
+                      };
                       $scope.location.beacons = [];
                       $rootScope.updateLocationList();
                     });
@@ -224,6 +232,7 @@ var app = angular.module('backendApp', [
             } else {
               $scope.job = {};
               $scope.job.msgType = 1;
+              $scope.job.msgContent = '';
               $scope.job.location_id = $scope.locations[0].id;
               $scope.job.type = 1;
               $scope.job.repeatInterval = 1;
@@ -318,13 +327,21 @@ var app = angular.module('backendApp', [
                     })
               }
               //subscribe to the transition room
-            io.socket.get('/transition/subscribeToTransition', function(resData) {
-              console.log(resData);
-            });
+            if (!io.socket.alreadyListeningToTransition) {
+              io.socket.alreadyListeningToTransition = true;
+              io.socket.get('/transition/subscribeToTransition', function(resData) {
+                console.log(resData);
+              });
+            } else {
+              io.socket.removeAllListeners("transition_created");
+              io.socket.removeAllListeners("transition_updated");
+            }
             //subscribe to transition_created event
             io.socket.on('transition_created', function(msg) {
               if (msg.transition.location_id === $scope.location.id) {
-                msg.transition.createdAt = moment(msg.transition.createdAt, 'YYYY-MM-DD HH:mm:ss').add('8', 'hours').format('YYYY-MM-DD HH:mm:ss');
+                io.socket.alreadyListeningToTransitionCreate = true;
+                console.log(msg.transition);
+                msg.transition.createdAt = moment(msg.transition.createdAt, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
                 //add the new transition
                 $scope.transitions.push(msg.transition);
                 console.log($scope.transitions);
@@ -335,7 +352,7 @@ var app = angular.module('backendApp', [
             });
             //subscribe to transition_updated event
             io.socket.on('transition_updated', function(msg) {
-              console.log(msg);
+              io.socket.alreadyListeningToTransitionUpdate = true;
               if (msg.transition.location_id === $scope.location.id) {
                 for (var i = 0; i < $scope.transitions.length; i++) {
                   if ($scope.transitions[i].id == msg.transition.id) {
@@ -509,6 +526,9 @@ app.directive('relativeTime', ['$interval', 'dateFilter', function($interval, da
 }]);
 app.controller('mainController', ['$rootScope', '$scope', '$http',
   function($rootScope, $scope, $http) {
+    io.socket.on('disconnect', function() {
+      alert('Disconnect to server. Please refresh the page.');
+    });
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
       $scope.loading = true;
       $scope.finish = false;

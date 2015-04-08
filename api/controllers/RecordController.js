@@ -42,6 +42,7 @@ module.exports = {
     Record
       .create({
         people_count: people_count,
+        actual_count: 0,
         agenda_id: agenda_id
       })
       .exec(function(err, record) {
@@ -54,6 +55,32 @@ module.exports = {
           res.send(record);
         }
       });
+  },
+
+  addCount: function(req, res) {
+    var id = req.param("id");
+    Record
+      .find({
+        id: id
+      })
+      .exec(function(err, record) {
+        if (record.length > 0) {
+          var actual_count = record[0].actual_count;
+          Record
+            .update({
+              id: id
+            }, {
+              actual_count: actual_count + 1
+            }).exec(function(err, record) {
+              res.send(record[0]);
+            });
+        } else {
+          res.json({
+            'debug': 'FAILURE'
+          })
+        }
+      });
+
   },
 
   /**
