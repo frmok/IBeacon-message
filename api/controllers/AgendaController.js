@@ -66,7 +66,7 @@ module.exports = {
       var currentDate = new Date().getTime();
       var msgText = job.attrs.data.msgText;
       var msgContent = job.attrs.data.msgContent;
-      var msgType = job.attrs.data.msgType;
+      var msgType = parseInt(job.attrs.data.msgType);
       var startDate = job.attrs.data.startDate;
       var endDate = job.attrs.data.endDate;
       var repeatInterval = job.attrs.data.repeatInterval;
@@ -114,7 +114,7 @@ module.exports = {
     });
     agenda.schedule(new Date(startDate), jobName, {
       msgText: msgText,
-      msgType: msgType,
+      msgType: parseInt(msgType),
       msgContent: msgContent,
       startDate: startDate,
       endDate: endDate,

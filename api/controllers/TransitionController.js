@@ -215,7 +215,7 @@ module.exports = {
   sendQuestion: function(req, res) {
     var msgText = req.param("msgText");
     var msgContent = req.param("msgContent");
-    var msgType = req.param("msgType");
+    var msgType = parseInt(req.param("msgType"));
     var location_id = req.param("location_id");
     var msgOptions = {
       msgType: msgType,

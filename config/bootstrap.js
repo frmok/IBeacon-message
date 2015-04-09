@@ -50,7 +50,7 @@ module.exports.bootstrap = function(cb) {
           var currentDate = new Date().getTime();
           var msgText = job.attrs.data.msgText;
           var msgContent = job.attrs.data.msgContent;
-          var msgType = job.attrs.data.msgType;
+          var msgType = parseInt(job.attrs.data.msgType);
           var startDate = job.attrs.data.startDate;
           var endDate = job.attrs.data.endDate;
           var repeatInterval = job.attrs.data.repeatInterval;
@@ -58,7 +58,8 @@ module.exports.bootstrap = function(cb) {
           var msgOptions = {
             msgType: msgType,
             msgContent: msgContent,
-            msgText: msgText
+            msgText: msgText,
+            recordId: '',
           };
           if (currentDate >= startDate && currentDate <= endDate || currentDate >= startDate && startDate == endDate) {
             console.log(new Date() + ' ' + msgText);
@@ -72,15 +73,18 @@ module.exports.bootstrap = function(cb) {
                 for (i = 0; i < transitions.length; i++) {
                   identifiers.push(transitions[i].identifier);
                 }
-                Push.sendMessage(msgOptions, identifiers);
                 Record
                   .create({
                     people_count: identifiers.length,
+                    actual_count: 0,
                     agenda_id: job.attrs._id.toString()
                   })
                   .exec(function(err, record) {
                     if (err) {
                       console.log(err);
+                    } else {
+                      msgOptions.recordId = record.id;
+                      Push.sendMessage(msgOptions, identifiers);
                     }
                   });
               });

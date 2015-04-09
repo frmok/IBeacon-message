@@ -71,11 +71,11 @@
         <div class="form-group">
         <label for="job_msgType" class="col-xs-3">Message Type</label>
           <select ng-disabled="job._id != null" id="job_msgType" ng-model="job.msgType">
-            <option value="1">Text</option>
-            <option value="2">Image</option>
-            <option value="3">Video</option>
-            <option value="4">Link</option>
-            <option value="5">Keep Poll</option>
+            <option value=1>Text</option>
+            <option value=2>Image</option>
+            <option value=3>Video</option>
+            <option value=4>Link</option>
+            <option value=5>Keep Poll</option>
           </select>
         </div>
         <div ng-show="job.msgType > 1" class="form-group">
