@@ -231,7 +231,7 @@ module.exports = {
       .exec(function(err, transitions) {
         if (err) {
           res.send(500, {
-            error: "FATAL ERROR"
+            debug: "FATAL ERROR"
           });
         } else {
           var identifiers = [];
@@ -258,7 +258,7 @@ module.exports = {
       .exec(function(err, transitions) {
         if (err) {
           res.send(500, {
-            error: "FATAL ERROR"
+            debug: "FATAL ERROR"
           });
         } else {
           var timeDiff = 0;

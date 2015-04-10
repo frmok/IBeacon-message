@@ -99,12 +99,12 @@ module.exports = {
         } else {
           if (beacon.length === 0) {
             res.send(200, {
-              debug: "NO LOCATION FOUND"
+              debug: "No location found"
             });
           } else {
             if (beacon[0].location_id === undefined) {
               res.send(200, {
-                debug: "NO LOCATION FOUND"
+                debug: "No location found"
               });
             } else {
               res.send(beacon[0].location_id);
@@ -143,7 +143,7 @@ module.exports = {
         if (err) {
           console.log(err);
           res.send(500, {
-            error: "FATAL ERROR"
+            debug: "FATAL ERROR"
           });
         } else {
           res.send(location);
@@ -184,10 +184,16 @@ module.exports = {
         if (err) {
           console.log(err);
           res.send(500, {
-            error: "FATAL ERROR"
+            debug: "FATAL ERROR"
           });
         } else {
-          res.send(location[0]);
+          if (location.length > 0) {
+            res.send(location[0]);
+          } else {
+            res.send(500, {
+              debug: "No locations found"
+            });
+          }
         }
       });
   },
@@ -222,17 +228,17 @@ module.exports = {
               var beaconIDs = beacons.map(function(beacon) {
                 return beacon.id;
               });
-              if(beaconIDs.length > 0){
-                  Beacon.destroy({
-                    id: beaconIDs
-                  }).exec(function(err) {
-                    res.send(200, {
-                        debug: "SUCCESS"
-                    });
-                  });
-              }else{
-                res.send(200, {
+              if (beaconIDs.length > 0) {
+                Beacon.destroy({
+                  id: beaconIDs
+                }).exec(function(err) {
+                  res.send(200, {
                     debug: "SUCCESS"
+                  });
+                });
+              } else {
+                res.send(200, {
+                  debug: "SUCCESS"
                 });
               }
             });

@@ -13,8 +13,20 @@ var agenda = new Agenda({
   }
 });
 module.exports = {
+  /**
+   * This method returns the list of advertisements
+   *
+   * @method index
+   * @param {Object} req - The request object
+   * @param {Object} res - The response object
+   */
   index: function(req, res) {
     agenda.jobs({}, function(err, jobs) {
+      if (err) {
+        res.send(500, {
+          error: "FATAL ERROR"
+        });
+      }
       if (jobs.length == 0) {
         res.send(jobs);
       } else {
@@ -38,7 +50,14 @@ module.exports = {
       }
     });
   },
-
+  /**
+   * This method returns the data of an advertisement
+   *
+   * @method create
+   * @param {Object} req - The request object
+   * @param {String} req.query.id - The id of advertisement
+   * @param {Object} res - The response object
+   */
   detail: function(req, res) {
     var id = req.param('id');
     agenda.jobs({
@@ -49,10 +68,30 @@ module.exports = {
           error: "FATAL ERROR"
         });
       }
-      res.send(jobs[0]);
+      if (jobs.length > 0) {
+        res.send(jobs[0]);
+      } else {
+        res.send(500, {
+          error: "No advertisement found"
+        });
+      }
     });
   },
-
+  /**
+   * This method creates a new advertisement and returns it
+   *
+   * @method create
+   * @param {Object} req - The request object
+   * @param {String} req.body.jobName - The name of advertisement
+   * @param {String} req.body.msgText - The text of the notification
+   * @param {String} req.body.msgContent - The actual content of the notification
+   * @param {Integer} req.body.msgType - The type of notification
+   * @param {Date} req.body.startDate - The start date of notification
+   * @param {Date} req.body.endDate - The end date of notification
+   * @param {Integer} req.body.repeatInterval - The repeat interval of notification
+   * @param {Integer} req.body.location_id - The id of location
+   * @param {Object} res - The response object
+   */
   create: function(req, res) {
     var jobName = req.param('name');
     var msgText = req.param('msgText');
@@ -127,11 +166,24 @@ module.exports = {
     agenda.start();
   },
 
+  /**
+   * This method deletes a specific advertisement
+   *
+   * @method delete
+   * @param {Object} req - The request object
+   * @param {String} req.body.id - The advertisement id
+   * @param {Object} res - The response object
+   */
   delete: function(req, res) {
     var id = req.param('id');
     agenda.cancel({
       _id: mongodb.ObjectID(id),
     }, function(err, numRemoved) {
+      if (err) {
+        res.send(500, {
+          debug: "FATAL ERROR"
+        });
+      }
       res.json({
         debug: "SUCCESS"
       });

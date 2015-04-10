@@ -20,7 +20,7 @@ module.exports = {
       .exec(function(err, beacons) {
         if (err) {
           res.send(500, {
-            error: "FATAL ERROR"
+            debug: "FATAL ERROR"
           });
         } else {
           res.send(beacons);
@@ -51,12 +51,12 @@ module.exports = {
       if (err) {
         console.log(err);
         res.send(500, {
-          error: "FATAL ERROR"
+          debug: "FATAL ERROR"
         });
       } else {
         if (beacon.length > 0) {
           res.send(500, {
-            error: "DUPLICATED BEACONS"
+            debug: "DUPLICATED BEACONS"
           });
         } else {
           addBeacon();
@@ -109,10 +109,16 @@ module.exports = {
         if (err) {
           console.log(err);
           res.send(500, {
-            error: "FATAL ERROR"
+            debug: "No beacons found"
           });
         } else {
-          res.send(beacon[0]);
+          if (beacon.length > 0) {
+            res.send(beacon[0]);
+          } else {
+            res.send(500, {
+              debug: "No beacons found"
+            });
+          }
         }
       });
   },
@@ -135,7 +141,7 @@ module.exports = {
         if (err) {
           console.log(err);
           res.send(500, {
-            error: "FATAL ERROR"
+            debug: "FATAL ERROR"
           });
         } else {
           res.send(200, {
