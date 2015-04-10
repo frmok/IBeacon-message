@@ -16,7 +16,7 @@ module.exports = {
     },
     distance: {
       type: 'float'
-    }
+    },
     msgType: {
       type: 'integer'
     },
