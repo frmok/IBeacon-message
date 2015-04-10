@@ -222,13 +222,19 @@ module.exports = {
               var beaconIDs = beacons.map(function(beacon) {
                 return beacon.id;
               });
-              Beacon.destroy({
-                id: beaconIDs
-              }).exec(function(err) {
+              if(beaconIDs.length > 0){
+                  Beacon.destroy({
+                    id: beaconIDs
+                  }).exec(function(err) {
+                    res.send(200, {
+                        debug: "SUCCESS"
+                    });
+                  });
+              }else{
                 res.send(200, {
-                  debug: "SUCCESS"
+                    debug: "SUCCESS"
                 });
-              });
+              }
             });
         }
       });
