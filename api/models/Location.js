@@ -14,6 +14,9 @@ module.exports = {
     disabled: {
       type: 'integer'
     },
+    distance: {
+      type: 'float'
+    }
     msgType: {
       type: 'integer'
     },

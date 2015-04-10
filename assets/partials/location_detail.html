@@ -19,6 +19,10 @@
         </select>
       </div>
       <div class="form-group">
+        <label for="location_distance" class="col-xs-3">Distance threshold</label>
+        <input ng-model="location.distance" class="col-xs-4" name="distance" type="text" id="location_distance">
+      </div>
+      <div class="form-group">
         <label for="location_msgType" class="col-xs-3">Welcome Message Type</label>
         <select id="location_msgType" ng-model="location.msgType">
           <option value="0">None</option>

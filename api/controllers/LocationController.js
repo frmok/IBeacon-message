@@ -125,14 +125,16 @@ module.exports = {
    */
   create: function(req, res) {
     var name = req.param("name");
-    var disabled = req.param("disabled");
-    var msgType = req.param("msgType");
+    var disabled = parseInt(req.param("disabled"));
+    var distance = parseFloat(req.param("distance"));
+    var msgType = parseInt(req.param("msgType"));
     var msgContent = req.param("msgContent");
     var msgText = req.param("msgText");
     Location
       .create({
         name: name,
         disabled: disabled,
+        distance: distance,
         msgType: msgType,
         msgContent: msgContent,
         msgText: msgText
@@ -162,8 +164,9 @@ module.exports = {
   update: function(req, res) {
     var id = req.param("id");
     var name = req.param("name");
-    var disabled = req.param("disabled");
-    var msgType = req.param("msgType");
+    var disabled = parseInt(req.param("disabled"));
+    var distance = parseFloat(req.param("distance"));
+    var msgType = parseInt(req.param("msgType"));
     var msgContent = req.param("msgContent");
     var msgText = req.param("msgText");
     Location
@@ -172,6 +175,7 @@ module.exports = {
       }, {
         name: name,
         disabled: disabled,
+        distance: distance,
         msgType: msgType,
         msgContent: msgContent,
         msgText: msgText
