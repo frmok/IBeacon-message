@@ -121,6 +121,10 @@ module.exports = {
    * @param {Object} req - The request object
    * @param {String} req.body.name - The name of location
    * @param {Integer} req.body.disabled - Whether the location is disabled (1:YES, 0:NO)
+   * @param {String} req.body.distance - The threshold distance of location
+   * @param {String} req.body.msgType - The type of welcome message
+   * @param {String} req.body.msgContent - The actual content of welcome message
+   * @param {String} req.body.msgText - The text of welcome message
    * @param {Object} res - The response object
    */
   create: function(req, res) {
@@ -159,6 +163,10 @@ module.exports = {
    * @param {Integer} req.body.id - The id of location
    * @param {String} req.body.name - The name of location
    * @param {Integer} req.body.disabled - Whether the location is disabled (1:YES, 0:NO)
+   * @param {String} req.body.distance - The threshold distance of location
+   * @param {String} req.body.msgType - The type of welcome message
+   * @param {String} req.body.msgContent - The actual content of welcome message
+   * @param {String} req.body.msgText - The text of welcome message
    * @param {Object} res - The response object
    */
   update: function(req, res) {

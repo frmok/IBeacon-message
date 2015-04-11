@@ -2,6 +2,7 @@
 var app = angular.module('backendApp', [
     'ui.router',
     'ngSanitize',
+    'nvd3ChartDirectives',
     'ui.bootstrap.datetimepicker',
   ])
   .run(['$rootScope', '$state', '$stateParams', '$http',
@@ -367,6 +368,30 @@ var app = angular.module('backendApp', [
           }
         ]
       });
+
+
+      $stateProvider.state("backend_transition_stat", {
+        resolve: {},
+        templateUrl: "/partials/stat.html",
+        url: "/location/stat/",
+        controller: ['$rootScope', '$scope', '$stateParams', 'Transition',
+          function($rootScope, $scope, $stateParams, Transition) {
+            $rootScope.currentAction = 'Statistics';
+            console.log(Transition);
+            $scope.xAxisTickFormatFunction = function() {
+              return function(d) {
+                return d3.time.format('%Y-%m-%d')(new Date(d));
+              }
+            }
+            Transition.statPeopleCount('5516f3f1a370d32061ecec3d').then(function(res) {
+              $scope.best_selling_item = [res.data];
+            });
+            Transition.statDuration('5516f3f1a370d32061ecec3d').then(function(res) {
+              $scope.profit = [res.data];
+            });
+          }
+        ]
+      });
     }
   ]);
 
@@ -403,6 +428,12 @@ app.factory('Transition', ['$http', function($http) {
   };
   factory.duration = function(id) {
     return $http.get('/transition/duration/' + id);
+  }
+  factory.statDuration = function(id) {
+    return $http.get('/transition/statDuration?id=' + id);
+  }
+  factory.statPeopleCount = function(id){
+    return $http.get('/transition/statPeopleCount?id=' + id);
   }
   return factory;
 }]);

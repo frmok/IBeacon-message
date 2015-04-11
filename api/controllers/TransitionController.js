@@ -274,6 +274,67 @@ module.exports = {
       })
   },
 
+  statDuration: function(req, res) {
+    var location_id = req.param("id");
+    Transition.native(function(err, collection) {
+      collection.aggregate([{
+        $match: {
+          "location_id": mongodb.ObjectId(location_id),
+          "next_location": {
+            $exists: true
+          }
+        }
+      }, {
+        $sort: {
+          "createdAt": 1,
+        }
+      }, {
+        $project: {
+          createdAtOffset: {
+            $add: ["$createdAt", 8 * 60 * 60 * 1000]
+          },
+          updatedAtOffset: {
+            $add: ["$updatedAt", 8 * 60 * 60 * 1000]
+          },
+          _id: 0
+        }
+      }, {
+        $group: {
+          _id: {
+            month: {
+              $month: "$createdAtOffset"
+            },
+            day: {
+              $dayOfMonth: "$createdAtOffset"
+            },
+            year: {
+              $year: "$createdAtOffset"
+            }
+          },
+          "count": {
+            "$sum": 1
+          },
+          "avg": {
+            $avg: {
+              $subtract: ["$updatedAtOffset", "$createdAtOffset"]
+            }
+          }
+        }
+      }], function(err, result) {
+        var stat = {
+          values: [],
+          key: 'Duration of stay'
+        };
+        result.map(function(row) {
+          var data = [new Date(row._id.year + '/' + row._id.month + '/' + row._id.day).getTime(), parseInt(row.avg / 1000)];
+          stat.values.push(data);
+        });
+        res.send(stat);
+      });
+
+    });
+  },
+
   statPeopleCount: function(req, res) {
     var location_id = req.param("id");
     Transition.native(function(err, collection) {
@@ -283,20 +344,43 @@ module.exports = {
         }
       }, {
         $sort: {
-          "createdAt": -1,
+          "createdAt": 1,
+        }
+      }, {
+        $project: {
+          createdAtOffset: {
+            $add: ["$createdAt", 8 * 60 * 60 * 1000]
+          },
+          updatedAtOffset: {
+            $add: ["$updatedAt", 8 * 60 * 60 * 1000]
+          },
+          identifier: "$identifier",
+          _id: 0
         }
       }, {
         $group: {
           _id: {
             month: {
-              $month: "$createdAt"
+              $month: "$createdAtOffset"
             },
             day: {
-              $dayOfMonth: "$createdAt"
+              $dayOfMonth: "$createdAtOffset"
             },
             year: {
-              $year: "$createdAt"
-            }
+              $year: "$createdAtOffset"
+            },
+            identifier: "$identifier"
+          },
+          "count": {
+            "$sum": 1
+          }
+        }
+      }, {
+        $group: {
+          _id: {
+            month: "$_id.month",
+            day: "$_id.day",
+            year: "$_id.year",
           },
           "count": {
             "$sum": 1
@@ -307,7 +391,7 @@ module.exports = {
           values: []
         };
         result.map(function(row) {
-          var data = [row._id.year + '-' + row._id.month + '-' + row._id.day, row.count];
+          var data = [new Date(row._id.year + '/' + row._id.month + '/' + row._id.day).getTime(), row.count];
           stat.values.push(data);
         });
         res.send(stat);
