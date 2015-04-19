@@ -101,6 +101,8 @@ module.exports = {
     var endDate = req.param('endDate');
     var repeatInterval = req.param('repeatInterval');
     var location_id = req.param('location_id');
+    var eventStartDate = req.param("eventStartDate");
+    var eventEndDate = req.param("eventEndDate");
     agenda.define(jobName, function(job, done) {
       var currentDate = new Date().getTime();
       var msgText = job.attrs.data.msgText;
@@ -110,11 +112,15 @@ module.exports = {
       var endDate = job.attrs.data.endDate;
       var repeatInterval = job.attrs.data.repeatInterval;
       var location_id = job.attrs.data.location_id;
+      var eventStartDate = job.attrs.data.eventStartDate;
+      var eventEndDate = job.attrs.data.eventEndDate;
       var msgOptions = {
         msgType: msgType,
         msgContent: msgContent,
         msgText: msgText,
         recordId: '',
+        eventStartDate: eventStartDate,
+        eventEndDate: eventEndDate,
       };
       if (currentDate >= startDate && currentDate <= endDate || currentDate >= startDate && startDate == endDate) {
         console.log(new Date() + ' ' + msgText);
@@ -159,6 +165,8 @@ module.exports = {
       endDate: endDate,
       repeatInterval: repeatInterval,
       location_id: location_id,
+      eventStartDate: eventStartDate,
+      eventEndDate: eventEndDate,
     });
     res.json({
       message: "Message created"

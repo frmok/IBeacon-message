@@ -217,11 +217,15 @@ module.exports = {
     var msgContent = req.param("msgContent");
     var msgType = parseInt(req.param("msgType"));
     var location_id = req.param("location_id");
+    var eventStartDate = req.param("eventStartDate");
+    var eventEndDate = req.param("eventEndDate");
     var msgOptions = {
       msgType: msgType,
       msgContent: msgContent,
       msgText: msgText,
       recordId: "",
+      eventStartDate: eventStartDate,
+      eventEndDate: eventEndDate,
     };
     Transition
       .find({
@@ -332,6 +336,137 @@ module.exports = {
         res.send(stat);
       });
 
+    });
+  },
+
+  uniqueVisitorToday: function(req, res) {
+    var location_id = req.param("id");
+    var today = new Date();
+    var todayTimestamp = today.setHours(0, 0, 0, 0);
+    Transition.native(function(err, collection) {
+      collection.aggregate([{
+        $match: {
+          "location_id": mongodb.ObjectId(location_id),
+          "createdAt": {
+            "$gt": new Date(todayTimestamp)
+          }
+        }
+      }, {
+        $sort: {
+          "createdAt": 1,
+        }
+      }, {
+        $project: {
+          createdAtOffset: {
+            $add: ["$createdAt", 8 * 60 * 60 * 1000]
+          },
+          updatedAtOffset: {
+            $add: ["$updatedAt", 8 * 60 * 60 * 1000]
+          },
+          identifier: "$identifier",
+          _id: 0
+        }
+      }, {
+        $group: {
+          _id: {
+            month: {
+              $month: "$createdAtOffset"
+            },
+            day: {
+              $dayOfMonth: "$createdAtOffset"
+            },
+            year: {
+              $year: "$createdAtOffset"
+            },
+            identifier: "$identifier"
+          },
+          "count": {
+            "$sum": 1
+          }
+        }
+      }, {
+        $group: {
+          _id: {
+            month: "$_id.month",
+            day: "$_id.day",
+            year: "$_id.year",
+          },
+          "count": {
+            "$sum": 1
+          }
+        }
+      }], function(err, result) {
+        if (result.length === 0) {
+          res.json({
+            count: 0
+          });
+        } else {
+          res.json({
+            count: result[0].count
+          });
+        }
+      });
+    });
+  },
+
+  popularPlace: function(req, res) {
+    var location_id = req.param("id");
+    Transition.native(function(err, collection) {
+      collection.aggregate([{
+        $match: {
+          "location_id": mongodb.ObjectId(location_id),
+          "next_location": {
+            $exists: true,
+            $ne: mongodb.ObjectId(location_id)
+          }
+        }
+      }, {
+        $sort: {
+          "createdAt": -1,
+        }
+      }, {
+        $group: {
+          _id: {
+            next_location: "$next_location",
+          },
+          "count": {
+            "$sum": 1
+          }
+        }
+      }, {
+        $sort: {
+          "count": -1
+        }
+      }], function(err, result) {
+        var all = 0;
+        if (result.length === 0) {
+          res.send(result);
+        }
+        for (i in result) {
+          (function(result, i) {
+            Location
+              .find({
+                id: String(result[i]._id.next_location)
+              }).exec(function(err, location) {
+                if (err) {
+                  console.log(err);
+                }
+                all++;
+                if(location.length === 0){
+                  result[i]._id.next_location = "Undefined";
+                }else{
+                  result[i]._id.next_location = location[0].name;
+                }
+                result[i]._id.next_location = location[0].name;
+                if (all == result.length) {
+                  (function(result) {
+                    res.send(result);
+                  })(result);
+                }
+              });
+          })(result, i)
+        }
+      });
     });
   },
 

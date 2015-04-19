@@ -820,7 +820,15 @@ Modal
     padding: 0 0 1.5rem 2.5rem;
     border-radius: 0 0 5px 5px;
 }
-
+.custom_modal .dropdown{
+    width: 100%;
+}
+.custom_modal .dropdown input{
+    border-radius: 0;   
+    font-size: 1rem;
+    width: 100%; 
+    padding: 0.5rem;
+}
 .custom_modal_content input{
     width: 100%;
     padding: 0.5rem;

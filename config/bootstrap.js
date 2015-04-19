@@ -55,11 +55,15 @@ module.exports.bootstrap = function(cb) {
           var endDate = job.attrs.data.endDate;
           var repeatInterval = job.attrs.data.repeatInterval;
           var location_id = job.attrs.data.location_id;
+          var eventStartDate = job.attrs.data.eventStartDate;
+          var eventEndDate = job.attrs.data.eventEndDate;
           var msgOptions = {
             msgType: msgType,
             msgContent: msgContent,
             msgText: msgText,
             recordId: '',
+            eventStartDate: eventStartDate,
+            eventEndDate: eventEndDate,
           };
           if (currentDate >= startDate && currentDate <= endDate || currentDate >= startDate && startDate == endDate) {
             console.log(new Date() + ' ' + msgText);

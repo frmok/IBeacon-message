@@ -23,6 +23,8 @@ module.exports = {
       'msgType': msgOptions.msgType,
       'msgContent': msgOptions.msgContent,
       'recordId': msgOptions.recordId,
+      'eventStartDate': msgOptions.eventStartDate,
+      'eventEndDate': msgOptions.eventEndDate,
     };
     note.alert = msgOptions.msgText;
     this.iOSPush(note, tokens);

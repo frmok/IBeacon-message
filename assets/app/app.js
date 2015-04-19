@@ -202,6 +202,14 @@ var app = angular.module('backendApp', [
               $scope.endDate = $filter('date')(newDate, 'yyyy-MM-dd HH:mm:ss');
               $scope.job.endDate = new Date(newDate).getTime();
             }
+            $scope.onTimeSet3 = function(newDate, oldDate) {
+              $scope.eventStartDate = $filter('date')(newDate, 'yyyy-MM-dd HH:mm:ss');
+              $scope.job.eventStartDate = new Date(newDate).getTime();
+            }
+            $scope.onTimeSet4 = function(newDate, oldDate) {
+              $scope.eventEndDate = $filter('date')(newDate, 'yyyy-MM-dd HH:mm:ss');
+              $scope.job.eventEndDate = new Date(newDate).getTime();
+            }
             $scope.addJob = function() {
               Job.create($scope.job)
                 .then(function(res) {
@@ -212,6 +220,7 @@ var app = angular.module('backendApp', [
                   $scope.job.msgType = 1;
                   $scope.job.repeatInterval = 1;
                   $scope.startDate = $scope.endDate = "";
+                  $scope.eventStartDate = $scope.eventEndDate = null;
                 });
             };
             if ($stateParams.id) {
@@ -222,6 +231,8 @@ var app = angular.module('backendApp', [
               $scope.job.location_id = job.data.data.location_id;
               $scope.startDate = moment.unix(job.data.data.startDate / 1000).format('YYYY-MM-DD HH:mm:ss');
               $scope.endDate = moment.unix(job.data.data.endDate / 1000).format('YYYY-MM-DD HH:mm:ss');
+              $scope.eventStartDate = moment.unix(job.data.data.eventStartDate / 1000).format('YYYY-MM-DD HH:mm:ss');
+              $scope.eventEndDate = moment.unix(job.data.data.eventEndDate / 1000).format('YYYY-MM-DD HH:mm:ss');
               if ($scope.startDate == $scope.endDate) {
                 $scope.job.type = 0;
               } else {
@@ -250,14 +261,33 @@ var app = angular.module('backendApp', [
               return Transition.log($stateParams.id);
             }
             return;
-          }]
+          }],
+          uniqueVisitor: ['Transition', '$stateParams', function(Transition, $stateParams) {
+            if ($stateParams.id) {
+              return Transition.uniqueVisitorToday($stateParams.id);
+            }
+            return;
+          }],
+          popularPlace: ['Transition', '$stateParams', function(Transition, $stateParams) {
+            if ($stateParams.id) {
+              return Transition.popularPlace($stateParams.id);
+            }
+            return;
+          }],
         },
         templateUrl: "/partials/location_log.html",
         url: "/location/log/{id}",
-        controller: ['$rootScope', '$scope', '$stateParams', 'transitions', '$filter',
-          function($rootScope, $scope, $stateParams, transitions, $filter) {
+        controller: ['$rootScope', '$scope', '$stateParams', 'transitions', '$filter', 'uniqueVisitor', 'popularPlace', '$filter',
+          function($rootScope, $scope, $stateParams, transitions, $filter, uniqueVisitor, popularPlace, $filter) {
+            $scope.locationID = $stateParams.id;
             $rootScope.currentAction = 'Transition Log';
             $scope.transitions = transitions.data;
+            $scope.uniqueVisitor = uniqueVisitor.data.count;
+            if(popularPlace.data.length > 0){
+              $scope.popularPlace = popularPlace.data[0]._id.next_location;
+            }else{
+              $scope.popularPlace = "No Place";
+            }
             $scope.onTimeSet = function(newDate, oldDate) {
               $scope.fromDate = $filter('date')(newDate, 'yyyy-MM-dd HH:mm:ss');
             }
@@ -290,19 +320,31 @@ var app = angular.module('backendApp', [
         },
         templateUrl: "/partials/location_monitor.html",
         url: "/location/{id}",
-        controller: ['$rootScope', '$scope', '$stateParams', 'Location', 'location', 'transitions', 'Transition', 'duration',
-          function($rootScope, $scope, $stateParams, Location, location, transitions, Transition, duration) {
+        controller: ['$rootScope', '$scope', '$stateParams', 'Location', 'location', 'transitions', 'Transition', 'duration', '$filter',
+          function($rootScope, $scope, $stateParams, Location, location, transitions, Transition, duration, $filter) {
             $scope.modal = {
               open: false,
               msgType: 1,
               msgContent: '',
               msgText: '',
+              eventStartDate: null,
+              eventEndDate: null
             };
             console.log(duration.data.duration);
             $scope.location = location.data;
             $scope.transitions = transitions.data || [];
             $scope.crud_action = $rootScope.currentAction = "Location Monitoring";
-            //for sending question
+            //set event start date
+            $scope.onTimeSet = function(newDate, oldDate) {
+                $scope.eventStartDate = $filter('date')(newDate, 'yyyy-MM-dd HH:mm:ss');
+                $scope.modal.eventStartDate = newDate.getTime();
+              }
+              //set event end date
+            $scope.onTimeSet2 = function(newDate, oldDate) {
+                $scope.eventEndDate = $filter('date')(newDate, 'yyyy-MM-dd HH:mm:ss');
+                $scope.modal.eventEndDate = newDate.getTime();
+              }
+              //for sending question
             $scope.sendQuestion = function() {
                 if ($scope.modal.msgText === "") {
                   alert('Please fill in the text')
@@ -319,13 +361,17 @@ var app = angular.module('backendApp', [
                     location_id: $scope.location.id,
                     msgContent: $scope.modal.msgContent,
                     msgType: parseInt($scope.modal.msgType),
-                    msgText: $scope.modal.msgText
+                    msgText: $scope.modal.msgText,
+                    eventStartDate: $scope.modal.eventStartDate,
+                    eventEndDate: $scope.modal.eventEndDate
                   }).then(
                     function(res) {
                       $scope.modal.open = false;
                       $scope.modal.msgType = 1;
                       $scope.modal.msgContent = '';
                       $scope.modal.msgText = '';
+                      $scope.eventStartDate = null;
+                      $scope.eventEndDate = null;
                     })
               }
               //subscribe to the transition room
@@ -373,7 +419,7 @@ var app = angular.module('backendApp', [
       $stateProvider.state("backend_transition_stat", {
         resolve: {},
         templateUrl: "/partials/stat.html",
-        url: "/location/stat/",
+        url: "/location/stat/{id}",
         controller: ['$rootScope', '$scope', '$stateParams', 'Transition',
           function($rootScope, $scope, $stateParams, Transition) {
             $rootScope.currentAction = 'Statistics';
@@ -383,10 +429,10 @@ var app = angular.module('backendApp', [
                 return d3.time.format('%Y-%m-%d')(new Date(d));
               }
             }
-            Transition.statPeopleCount('5516f3f1a370d32061ecec3d').then(function(res) {
+            Transition.statPeopleCount($stateParams.id).then(function(res) {
               $scope.best_selling_item = [res.data];
             });
-            Transition.statDuration('5516f3f1a370d32061ecec3d').then(function(res) {
+            Transition.statDuration($stateParams.id).then(function(res) {
               $scope.profit = [res.data];
             });
           }
@@ -432,8 +478,14 @@ app.factory('Transition', ['$http', function($http) {
   factory.statDuration = function(id) {
     return $http.get('/transition/statDuration?id=' + id);
   }
-  factory.statPeopleCount = function(id){
+  factory.statPeopleCount = function(id) {
     return $http.get('/transition/statPeopleCount?id=' + id);
+  }
+  factory.popularPlace = function(id) {
+    return $http.get('/transition/popularPlace?id=' + id);
+  }
+  factory.uniqueVisitorToday = function(id) {
+    return $http.get('/transition/uniqueVisitorToday?id=' + id);
   }
   return factory;
 }]);

@@ -1,8 +1,45 @@
+
+
+<div class="col-md-12">
+    <div class="col-md-4">
+        <div class="tile tile_red">
+            <div class="tile_content ng-binding">
+                {{ uniqueVisitor }}
+            </div>
+            <div class="tile_text">
+                Unique vistors of today
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="tile tile_blue">
+            <div class="tile_content ng-binding">
+                {{ popularPlace }}
+            </div>
+            <div class="tile_text">
+                Famous next location
+            </div>
+        </div>
+    </div>
+    <a href="#/location/stat/{{ locationID }}">
+        <div class="col-md-4">
+            <div class="tile tile_orange">
+                <div class="tile_content ng-binding">
+                    Statistics
+                </div>
+                <div class="tile_text">
+                    More detailed data
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
 <div class="col-md-12 main-view">
+
     <div class="table-control">
         <div class="dropdown">
             <a class="dropdown-toggle" id="dropdown" role="button" data-toggle="dropdown">
-            <div class="input-group"><input type="text" class="form-control" data-ng-model="fromDate" placeholder="From Date">
+                <div class="input-group"><input type="text" class="form-control" data-ng-model="fromDate" placeholder="From Date">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                 </div>
             </a>
@@ -12,7 +49,7 @@
         </div>
         <div class="dropdown">
             <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown">
-            <div class="input-group"><input type="text" class="form-control" data-ng-model="toDate" placeholder="To Date">
+                <div class="input-group"><input type="text" class="form-control" data-ng-model="toDate" placeholder="To Date">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                 </div>
             </a>
@@ -21,6 +58,7 @@
             </ul>
         </div>
     </div>
+
     <div class="chart">
         <div class="normal-content">
             <table>

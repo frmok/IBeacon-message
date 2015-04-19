@@ -61,10 +61,27 @@
         <option value="2">Image</option>
         <option value="3">Video</option>
         <option value="4">Link</option>
-        <option value="5">Keep Poll</option>
+        <option value="5">KEEP Poll</option>
+        <option value="6">Event</option>
       </select>
       <input ng-show="modal.msgType > 1" ng-model="modal.msgContent" type="text" required placeholder="Notification content" />
       <input ng-model="modal.msgText" type="text" required placeholder="Notification text" />
+      <div ng-show="modal.msgType == 6" class="dropdown">
+        <a class="dropdown-toggle" id="dropdown" role="button" data-toggle="dropdown">
+          <input type="text" class="form-control" data-ng-model="eventStartDate" placeholder="Start Date">
+        </a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+          <datetimepicker data-ng-model="data.dateDropDownInput" data-on-set-time="onTimeSet(newDate, oldDate)" data-datetimepicker-config="{ dropdownSelector: '#dropdown' }"/>
+        </ul>
+      </div>
+      <div ng-show="modal.msgType == 6" class="dropdown">
+        <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown">
+          <input type="text" class="form-control" data-ng-model="eventEndDate" placeholder="End Date">
+        </a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+          <datetimepicker data-ng-model="data.dateDropDownInput" data-on-set-time="onTimeSet2(newDate, oldDate)" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"/>
+        </ul>
+      </div>
     </div>
     <div class="custom_modal_footer">
       <input ng-click="sendQuestion()" type="submit" value="Send">
